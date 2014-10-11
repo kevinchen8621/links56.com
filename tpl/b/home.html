@@ -1,0 +1,309 @@
+<div class="page-header"><h1>我的桌面<small><i class="icon-double-angle-right"></i> 摘要 &amp; 分析</small></h1></div><!-- /.page-header -->
+<div class="row">
+	<div class="col-xs-12">
+		<!-- PAGE CONTENT BEGINS -->
+		<div ng-if="user.alert" class="alert alert-block alert-success">
+			<button type="button" class="close" data-dismiss="alert"><i class="icon-remove"></i></button><i class="icon-ok green"></i>
+			{{user.alert}}
+		</div>
+
+		<div class="row">
+			<div class="space-6"></div>
+			<div class="col-sm-7 infobox-container">
+				<div class="infobox infobox-green  ">
+					<div class="infobox-icon"><i class="icon-cogs"></i></div>
+					<div class="infobox-data">
+						<span class="infobox-data-number">{{summary.waybills_count_get}}单</span>
+						<div class="infobox-content">取货阶段</div>
+					</div>
+					<div class="stat" ng-class="{stat-success:true, stat-important:false}[summary.waybills_isincrease_get]">{{summary.waybills_progress_get}}%</div>
+				</div>
+				<div class="infobox infobox-blue  ">
+					<div class="infobox-icon"><i class="icon-exchange"></i></div>
+					<div class="infobox-data">
+						<span class="infobox-data-number">{{summary.waybills_count_carry}}单</span>
+						<div class="infobox-content">运输阶段</div>
+					</div>
+					<div class="badge badge-success">{{summary.waybills_progress_carry}}%<i class="icon-arrow-up" ng-class="{icon-arrow-up:true, icon-arrow-down:false}[summary.waybills_isincrease_carry]"></i></div>
+				</div>
+
+				<div class="infobox infobox-pink  ">
+					<div class="infobox-icon"><i class="icon-lock"></i></div>
+					<div class="infobox-data">
+						<span class="infobox-data-number">{{summary.waybills_count_warehouse}}单</span>
+						<div class="infobox-content">存储阶段</div>
+					</div>
+					<div class="stat stat-important">{{summary.waybills_progress_warehouse}}%</div>
+				</div>
+
+				<div class="infobox infobox-red  ">
+					<div class="infobox-icon"><i class="icon-shopping-cart"></i></div>
+					<div class="infobox-data">
+						<span class="infobox-data-number">{{summary.waybills_count_finance}}单</span>
+						<div class="infobox-content">结算阶段</div>
+					</div>
+				</div>
+
+				<div class="infobox infobox-orange2  ">
+					<div class="infobox-icon"><i class="icon-coffee"></i></div>
+					<div class="infobox-data">
+						<span class="infobox-data-number">6,251</span>
+						<div class="infobox-content">订单成交率</div>
+					</div>
+					<div class="badge badge-success">7.2%<i class="icon-arrow-up"></i></div>
+				</div>
+
+				<div class="infobox infobox-blue2  ">
+					<div class="infobox-icon"><i class="icon-legal"></i></div>
+					<div class="infobox-data">
+						<span class="infobox-text">{{summary.waybills_rate_well}}%</span>
+						<div class="infobox-content">运单正常率</div>
+					</div>
+				</div>
+
+				<div class="space-6"></div>
+
+				<div class="infobox infobox-green infobox-small infobox-dark">
+					<div class="infobox-icon"><i class="icon-bell-alt"></i></div>
+					<div class="infobox-data"><div class="infobox-content">订单{{summary.orders_count_latest}}单</div><div class="infobox-content">冠军月{{summary.orders_count_top}}</div></div>
+				</div>
+				<div class="infobox infobox-blue infobox-small infobox-dark">
+					<div class="infobox-icon"><i class="icon-book"></i></div>
+					<div class="infobox-data"><div class="infobox-content">订单￥{{summary.orders_money_latest}}</div><div class="infobox-content">冠军月￥{{summary.orders_money_latest}}</div></div>
+				</div>
+
+				<div class="infobox infobox-grey infobox-small infobox-dark">
+					<div class="infobox-icon"><i class="icon-download-alt"></i></div>
+					<div class="infobox-data"><div class="infobox-content">运单{{summary.waybills_count_latest}}单</div><div class="infobox-content">冠军月{{summary.waybills_count_top}}</div></div>
+				</div>
+			</div>
+
+			<div class="vspace-sm"></div>
+
+			<div class="col-sm-5">
+				<div class="widget-box">
+					<div class="widget-header widget-header-flat widget-header-small">
+						<h5><i class="icon-signal"></i>统计图表</h5>
+					</div>
+					<div class="widget-body">
+						<div class="widget-main">
+							<div class= "row">
+								<div class="col-sm-8">
+									<style type="text/css">[ac-chart] {float:left;width: 98%;height: 200px;margin: 0 1%;}</style>
+									<div id="chart" ac-chart="chartType1" ac-data="chartData1" ac-config="chartConfig1"></div>
+								</div>
+								<div class="col-sm-4">
+								<button class="btn btn-sm" ng-click="setChart('1')">发运地区分布1</button>
+								<button class="btn btn-sm btn-warning"  ng-click="setChart('2')">其他统计图表2</button>
+								<button class="btn btn-sm btn-success" ng-click="setChart('3')">其他统计图表3</button>
+								<button class="btn btn-sm btn-danger" ng-click="setChart('4')">其他统计图表4</button>
+								<button class="btn btn-sm btn-info" ng-click="setChart('5')">其他统计图表5</button>
+								<button class="btn btn-sm btn-primary" ng-click="setChart('6')">其他统计图表6</button>
+								</div>
+							</div>
+						</div><!-- /widget-main -->
+					</div><!-- /widget-body -->
+				</div><!-- /widget-box -->
+			</div><!-- /span -->
+		</div><!-- /row -->
+
+		<div class="hr hr32 hr-dotted"></div>
+
+		<div class="row">
+			<div class="col-sm-5">
+				<div class="widget-box transparent" data-bs-collapse>
+					<div class="widget-header widget-header-flat">
+						<h4 class="lighter"><i class="icon-star orange"></i>异常监控[销售收入线斜率|方向导数]</h4>
+						<div class="widget-toolbar"><a href="#" class="collapse"><i class="icon-chevron-up"></i></a></div>
+					</div>
+					<div class="widget-body collapse-pane">
+						<div class="widget-main no-padding">
+							<table class="table table-bordered table-striped">
+								<thead class="thin-border-bottom">
+									<tr>
+										<th><i class="icon-caret-right blue"></i>客户</th>
+										<th><i class="icon-caret-right blue"></i>变化率[方向导数]</th>
+										<th class="hidden-480"><i class="icon-caret-right blue"></i>跟进建议</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-if="customer_derivatives.length>0"><td>{{customer_derivatives[0].org_name}}</td><td><b class="red">{{customer_derivatives[0].slope}}</b>|<b class="green">{{customer_derivatives[0].derivative}}</b></td><td class="hidden-480"><span class="label label-info arrowed-right arrowed-in">{{customer_derivatives[0].suggest}}</span></td></tr>
+									<tr ng-if="customer_derivatives.length>1"><td>{{customer_derivatives[1].org_name}}</td><td><b class="red">{{customer_derivatives[1].slope}}</b>|<b class="green">{{customer_derivatives[1].derivative}}</b></td><td class="hidden-480"><span class="label label-info arrowed-right arrowed-in">{{customer_derivatives[1].suggest}}</span></td></tr>
+									<tr ng-if="customer_derivatives.length>2"><td>{{customer_derivatives[2].org_name}}</td><td><b class="red">{{customer_derivatives[2].slope}}</b>|<b class="green">{{customer_derivatives[2].derivative}}</b></td><td class="hidden-480"><span class="label label-info arrowed-right arrowed-in">{{customer_derivatives[2].suggest}}</span></td></tr>
+									<tr ng-if="customer_derivatives.length>3"><td>{{customer_derivatives[3].org_name}}</td><td><b class="red">{{customer_derivatives[3].slope}}</b>|<b class="green">{{customer_derivatives[3].derivative}}</b></td><td class="hidden-480"><span class="label label-info arrowed-right arrowed-in">{{customer_derivatives[3].suggest}}</span></td></tr>
+									<tr ng-if="customer_derivatives.length>4"><td>{{customer_derivatives[4].org_name}}</td><td><b class="red">{{customer_derivatives[4].slope}}</b>|<b class="green">{{customer_derivatives[4].derivative}}</b></td><td class="hidden-480"><span class="label label-info arrowed-right arrowed-in">{{customer_derivatives[4].suggest}}</span></td></tr>
+								</tbody>
+							</table>
+						</div><!-- /widget-main -->
+					</div><!-- /widget-body -->
+				</div><!-- /widget-box -->
+			</div>
+
+			<div class="col-sm-7">
+				<div class="widget-box transparent"  data-bs-collapse>
+					<div class="widget-header widget-header-flat">
+						<h4 class="lighter"><i class="icon-signal"></i>业务量变化状态图</h4>
+						<div class="widget-toolbar"><a href="#" class="collapse"><i class="icon-chevron-up"></i></a></div>
+					</div>
+					<div class="widget-body collapse-pane">
+						<div class="widget-main padding-4">
+							<style type="text/css">[ac-chart] {float:left;width: 98%;height: 250px;margin: 0 1%;}</style>
+							<div id="derivative-chart" ac-chart="chartType2" ac-data="chartData2" ac-config="chartConfig2"></div>
+						</div><!-- /widget-main -->
+					</div><!-- /widget-body -->
+				</div><!-- /widget-box -->
+			</div>
+		</div>
+
+		<div class="hr hr32 hr-dotted"></div>
+
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="widget-box transparent" id="recent-box"  data-bs-tab>
+					<div class="widget-header">
+						<h4 class="lighter smaller"><i class="icon-rss orange"></i>最新运管信息</h4>
+						<div class="widget-toolbar no-border">
+							<ul class="nav nav-tabs" id="recent-tab">
+								<li class="active"><a data-toggle="tab" href="#task-tab">运单</a></li>
+								<li><a data-toggle="tab" href="#member-tab">承运司机</a></li>
+								<li><a data-toggle="tab" href="#comment-tab">跟踪&异常</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="widget-body">
+						<div class="widget-main padding-4">
+							<div class="tab-content padding-8 overflow-visible">
+								<div id="task-tab" class="tab-pane active">
+									<h4 class="smaller lighter green"><i class="icon-list"></i>进行中运单</h4>
+									<ul id="tasks" class="item-list">
+										<li class="item-{{item.tag}} clearfix" ng-repeat="item in waybills">
+											<label class="inline"><i class="blue icon-rocket"></i><span class="lbl"> {{item.title}}</span></label>
+											<div class="pull-right action-buttons">
+												<a href="#" class="blue">{{item.progress}}%</a>
+												<span class="vbar"></span>
+												<a href="#" class="red"><i class="icon-pencil bigger-130"></i></a>
+												<span class="vbar"></span>
+												<a href="#" class="green"><i class="icon-flag bigger-130"></i></a>
+											</div>
+										</li>	
+									</ul>
+								</div>
+
+								<div id="member-tab" class="tab-pane">
+									<div class="clearfix">
+										<div class="itemdiv memberdiv" ng-repeat="item in carriers">
+											<div class="user"><img alt="Bob Doe's avatar" src="{{item.avatar}}" /></div>
+											<div class="body">
+												<div class="name"><a href="#">{{item.realname}}</a></div>
+												<div class="time"><i class="icon-time"></i><span class="green">{{item.reportTime}}</span></div>
+												<div>
+													<span class="label label-warning label-sm">{{item.status}}</span>
+													<div class="inline position-relative">
+														<button class="btn btn-minier bigger btn-yellow btn-no-border dropdown-toggle" data-toggle="dropdown"><i class="icon-angle-down icon-only bigger-120"></i></button>
+														<ul class="dropdown-menu dropdown-only-icon dropdown-yellow pull-right dropdown-caret dropdown-close">
+															<li><a href="#" class="tooltip-success" data-rel="tooltip" title="Approve"><span class="green"><i class="icon-ok bigger-110"></i></span></a></li>
+															<li>
+																<a href="#" class="tooltip-warning" data-rel="tooltip" title="Reject">
+																	<span class="orange">
+																		<i class="icon-remove bigger-110"></i>
+																	</span>
+																</a>
+															</li>
+
+															<li>
+																<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
+																	<span class="red">
+																		<i class="icon-trash bigger-110"></i>
+																	</span>
+																</a>
+															</li>
+														</ul>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="center">
+										<i class="icon-group icon-2x green"></i>
+
+										&nbsp;
+										<a href="#">
+											查看所有司机信息 &nbsp;
+											<i class="icon-arrow-right"></i>
+										</a>
+									</div>
+
+									<div class="hr hr-double hr8"></div>
+								</div><!-- member-tab -->
+
+								<div id="comment-tab" class="tab-pane">
+									<div class="comments">
+										<div class="itemdiv commentdiv" ng-repeat="item in tracks">
+											<div class="user"><img alt="{{item.realname}}" src="{{item.avatar}}" /></div>
+											<div class="body">
+												<div class="name"><a href="#">{{item.realname}}</a></div>
+												<div class="time"><i class="icon-time"></i><span class="green">6 分钟前</span></div>
+												<div class="text"><i class="icon-quote-left"></i>{{item.content}} &hellip;</div>
+											</div>
+											<div class="tools">
+												<div class="action-buttons bigger-125">
+													<a href="#">
+														<i class="icon-pencil blue"></i>
+													</a>
+
+													<a href="#">
+														<i class="icon-trash red"></i>
+													</a>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="hr hr8"></div>
+									<div class="center">
+										<i class="icon-comments-alt icon-2x green"></i>&nbsp;
+										<a href="#">查看历史跟踪&异常报警记录 &nbsp;<i class="icon-arrow-right"></i></a>
+									</div>
+									<div class="hr hr-double hr8"></div>
+								</div>
+							</div>
+						</div><!-- /widget-main -->
+					</div><!-- /widget-body -->
+				</div><!-- /widget-box -->
+			</div><!-- /span -->
+			<div class="col-sm-6">
+				<div class="widget-box ">
+					<div class="widget-header"><h4 class="lighter smaller"><i class="icon-comment blue"></i>内部公告板</h4></div>
+					<div class="widget-body">
+						<div class="widget-main no-padding">
+							<div class="dialogs">
+								<div class="itemdiv dialogdiv" ng-repeat="item in bbs">
+									<div class="user"><img alt="Alexa's Avatar" src="{{item.user.avatar}}" /></div>
+									<div class="body">
+										<div class="time"><i class="icon-time"></i><span class="green">{{item.create_at}}</span></div>
+										<div class="name"><a href="#">{{item.username}}</a></div>
+										<div class="text">{{item.content}}</div>
+										<div class="tools"><a href="#" class="btn btn-minier btn-info"><i class="icon-only icon-share-alt"></i></a></div>
+									</div>
+								</div>
+							</div>
+
+							<form>
+								<div class="form-actions">
+									<div class="input-group">
+										<input placeholder="发布一条公告信息 ..." type="text" class="form-control" name="message" />
+										<span class="input-group-btn"><button class="btn btn-sm btn-info no-radius" type="button"><i class="icon-share-alt"></i>发布</button></span>
+									</div>
+								</div>
+							</form>
+						</div><!-- /widget-main -->
+					</div><!-- /widget-body -->
+				</div><!-- /widget-box -->
+			</div><!-- /span -->
+		</div><!-- /row -->
+
+		<!-- PAGE CONTENT ENDS -->
+	</div><!-- /.col -->
+</div><!-- /.row -->
