@@ -47581,6 +47581,14 @@ mo.constant('constants', {
 	tpl_url: 'http://xinziji.com/assets/',
 })
 .service('utils', function () {
+	this.applyToSet = function(obj, sets){
+		var idx = _.indexOf(sets, function(item){return item._id == obj._id});
+		if(idx == -1){sets.push(obj);}else{sets.splice(idx, 1, cat);}
+	};
+	this.delFromSet = function(obj, sets){
+		var idx = _.indexOf(sets, function(item){return item._id == obj._id});
+		if(idx !== -1){sets.splice(idx, 1);}
+	};
 	this.getAddAllGroupOptions = function (scope, attrs, classes) {return getAddAllOptions(scope, attrs, "Group", classes);};
 	this.getAddAllFieldOptions = function (scope, attrs, classes) {return getAddAllOptions(scope, attrs, "Field", classes);};
 	this.getAddAllLabelOptions = function (scope, attrs, classes) {return getAddAllOptions(scope, attrs, "Label", classes);};
@@ -47992,6 +48000,128 @@ mo.constant('constants', {
 				cb();
 			});			
 		},
+	};
+}])
+.factory('$dist', ["$rootScope", "$window", "$rest", function($rootScope, $window, $rest) {
+	var taobao_dists;
+	if($window.localStorage.taobao_dists){
+		taobao_dists =  JSON.parse($window.localStorage.taobao_dists || "{}");
+	}else{
+		$rest.get_taobao_dists(function(dists){
+			$window.localStorage.taobao_dists = JSON.stringify(dists);
+			taobao_dists = dists;
+		});
+	}
+	return {
+		get_by_code: function(distcode){
+			var  result = {countrys: _.filter(taobao_dists, function(item){ return item.parent_id == 0;})}, 
+				cur = distcode ? _.find(taobao_dists, function(item){ return item._id == distcode;}) : 0;
+			if(!cur){
+				result.country = 1; result.provinces = 310000; result.city = 310100; result.town = 310115;
+				result.provinces = _.filter(taobao_dists, function(item){ return item.parent_id == 1});
+				result.citys = _.filter(taobao_dists, function(item){ return item.parent_id == 310000});
+				result.towns = _.filter(taobao_dists, function(item){ return item.parent_id == 310100});
+			}else if(cur.type == 4){
+				var c = _.find(taobao_dists, function(item){ return item._id == cur.parent_id});
+				var p = _.find(taobao_dists, function(item){ return item._id == c.parent_id});
+				var u = _.find(taobao_dists, function(item){ return item._id == p.parent_id});
+				result.town = cur._id; result.city = c._id; result.province = p._id; result.country = p.parent_id;
+				result.towns = _.filter(taobao_dists, function(item){ return item.parent_id == cur.parent_id});
+				result.citys = _.filter(taobao_dists, function(item){ return item.parent_id == c.parent_id});
+				result.provinces = _.filter(taobao_dists, function(item){ return item.parent_id == p.parent_id});
+			}else if(cur.type == 3){
+				var p = _.find(taobao_dists, function(item){ return item._id == cur.parent_id;});
+				result.town = 0; result.city = cur._id; result.province = p._id; result.country = p.parent_id;
+				result.towns = _.filter(taobao_dists, function(item){ return item.parent_id == cur._id;});
+				result.citys = _.filter(taobao_dists, function(item){ return item.parent_id == cur.parent_id;});
+				result.provinces = _.filter(taobao_dists, function(item){ return item.parent_id == p.parent_id;});
+			}else if(cur.type == 2){
+				var u = _.find(taobao_dists, function(item){ return item._id == cur.parent_id});
+				result.town = 0; result.city = 0; result.province = cur._id; result.country = cur.parent_id;
+				result.towns = [];
+				result.citys = _.filter(taobao_dists, function(item){ return item.parent_id == cur._id;});
+				result.provinces = _.filter(taobao_dists, function(item){ return item.parent_id == cur.parent_id});
+			}else if(cur.type == 1){
+				var country = _.find(taobao_dists, function(item){ return item._id == cur.parent_id});
+				result.town = 0; result.city = 0; result.province = 0; result.country = cur._id;
+				result.towns = [];
+				result.citys = [];
+				result.provinces = _.filter(taobao_dists, function(item){ return item.parent_id == cur._id});
+			}
+			return result;
+		},
+		caption_by_code: function(distcode){
+			var  cur = distcode ? _.find(taobao_dists, function(item){ return item._id == distcode;}) : 0;
+			if(!cur){
+				return "";
+			}else if(cur.type == 4){
+				var 	t = _.find(taobao_dists, function(item){item._id == cur._id;}),
+					c = _.find(taobao_dists, function(item){item._id == t.parent_id;}),
+					p = _.find(taobao_dists, function(item){item._id == c.parent_id;}),
+					u = _.find(taobao_dists, function(item){item._id == p.parent_id;});
+				return u.name + " " + p.name + " " + c.name + " " + t.name + " ";
+			}else if(cur.type == 3){
+				var 	c = _.find(taobao_dists, function(item){item._id == t.parent_id;}),
+					p = _.find(taobao_dists, function(item){item._id == c.parent_id;}),
+					u = _.find(taobao_dists, function(item){item._id == p.parent_id;});
+				return u.name + " " + p.name + " " + c.name + " ";
+			}else if(cur.type == 2){
+				var 	p = _.find(taobao_dists, function(item){item._id == c.parent_id;}),
+					u = _.find(taobao_dists, function(item){item._id == p.parent_id;});
+				return u.name + " " + p.name + " ";
+			}else if(cur.type == 1){
+				var 	u = _.find(taobao_dists, function(item){item._id == p.parent_id;});
+				return u.name + " ";
+			}
+		},
+	}
+}])
+.factory('$rest', ["$rootScope", "$window", "$http", "$state", function($rootScope, $window, $http, $state) {
+	function get(url, param, cb){
+		if(typeof(param) == "function"){cb = param;param = {};}
+		param = param || {};
+		cb = cb || angular.noop;
+		$http.get(url, param)
+			.success(function(data, status, headers, config){
+				if(data.error){toastr.error(data.error);return;} cb(data)
+			})
+			.error(function(data, status, headers, config){
+				var err = {status:status, title:"未知错误!",message:""};
+				if($rootScope.user && $rootScope.user.username == "kevinchen8621"){ err.message = "[url:"+config.url+"]" + "[method:"+config.method+"]"+ "[data:"+JSON.stringify(config.data)+"]";}
+				if(status == 502){err.message = "远程服务器访问失败，检查网络或联系管理员！\n" + err.message;}
+				toastr.error(err.message, err.title);
+			});
+	}
+	function post(url, param, cb){
+		if(typeof(param) == "function"){cb = param;param = {};}
+		cb = cb || angular.noop;
+		$http.post(url, param)
+			.success(function(data, status, headers, config){
+				if(data.error){toastr.error(data.error);return;}
+				cb(data)
+			})
+			.error(function(data, status, headers, config){
+				var err = {title:"未知错误!" + status, message:""};
+				if($rootScope.user && $rootScope.user.username == "kevinchen8621"){ err.message = "[url:"+config.url+"]" + "[method:"+config.method+"]"+ "[data:"+JSON.stringify(config.data)+"]";}
+				if(status == 502){err.message = "远程服务器访问失败，检查网络或联系管理员！\n" + err.message;}
+				toastr.error(err.message, err.title);
+			});
+	}
+	return {
+		get_members:function(cb){get("/api/members", cb);},
+		get_member_by_id:function(id, cb){get("/api/member/" + id, cb);},
+		del_member_by_id:function(id, cb){get("/api/member/del/" + id, cb);},
+		set_member:function(obj, cb){post("/api/member", obj, cb);},
+
+		get_videos_by_catid:function(catid, cb){get("/api/videos/catid/"+catid, cb);},
+		get_cust_orgs: function(cb){ get("/api/cust/orgs", cb);},
+		get_taobao_dists: function(cb){ get("/api/taobao/dists", cb);},
+		del_cust_org: function(custOrg, cb){ post("/api/cust/org/del", custOrg, cb);},
+		set_cust_org: function(custOrg, cb){ post("/api/cust/org", custOrg, cb);},
+		get_cust_orgs: function(cb){ get("/api/cust/orgs", cb);},
+		del_cust_contact: function(custContact, cb){ post("/api/cust/contact/del", custContact, cb);},
+		set_cust_contact: function(custContact, cb){ post("/api/cust/contact", custContact, cb);},
+		get_cust_contacts: function(cb){ get("/api/cust/contacts", cb);},
 	};
 }])
 ;
