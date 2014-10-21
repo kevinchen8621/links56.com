@@ -1,128 +1,114 @@
-<link href="css/main.css" rel="stylesheet">
-<div ng-hide="showJobNav" class="navbar navbar-default" role="navigation">
-	<div class="container-fluid">
-		<ul id="navigator" class="nav navbar-nav">
-			<li><a href="#">主页</a></li>
-			<li><a href="#logDiv">解决方案</a></li>
-			<li><a href="#ssDiv">系统服务</a></li>
-			<li data-toggle="#zhaopinDiv"><a href="#/jobs">加入我们</a></li>
-			<li><a href="#/contact">关于邻客</a></li>
-			<li>
-				<div class="navbar-signin">
-					<img src="images/signin.png">
-					<div ng-hide="user">
-						<span>欢迎您！</span><br/>
-						<a href="#/s/signin">登录</a>  | 
-						<a  href="#/s/signup">注册</a>
-					</div>
-					<div ng-show="user">
-						<a href="#/b/home">我的{{site.title}}</a>  | 
-					</div>
-				</div>
-			</li>
-		</ul>
-		<ul class="nav navbar-nav navbar-right"><li><a href="#"><img src="images/search.png"></a></li></ul>
-		<div id="zhaopinDiv">
-			<img id="redTrian" src="images/redtriangle.png">
-			<div>
-				<ul>
-					<li ng-repeat="item in jobs | orderBy: '-date' | limitTo:4" class="white"><span class="arrow-right"></span><a class="" href="#">{{item.title}}</a></li>
-				</ul>
-				<ul>
-					<li ng-repeat="item in jobs | orderBy: '-date' | limitTo:8 | limitTo:-4" class="white"><span class="arrow-right"></span><a href="#">{{item.title}}</a></li>
-				</ul>
-			</div>
-			<div>
-				<span>招聘负责人</span>
-				<span>Recruiting Director</span>
-				<div>
-					<img src="images/chenziwen.png">
-					<div class="white"><span>{{site.hunter}}</span><a href="mailto:{{site.hunterEmail}}?subject=我想应聘{{site.title}}的招聘职位&body=我对贵公司的职位感兴趣，附件是我的简历。">{{site.hunterEmail}}</a></div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<div ng-show="showJobNav" class="navbar navbar-default" id="secondnav" role="navigation">
-	<div class="container-fluid">
-		<ul class="nav navbar-nav">
-			<li ng-repeat="item in cats | filter:{type:'job'} | orderBy:'key'"><a ng-click="setJobCat(item.key)">{{item.title}}</a></li>
-		</ul>
-	</div>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="images/icon.png">
+    <title>首页</title>
+    <!-- Custom styles for this template -->
+    <link href="css/main.css" rel="stylesheet">
+      
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body role="document">
+          <!-- Static navbar -->
+          <div id="navigator" class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+                <ul class="nav navbar-nav">
+                    <li><a href="javascript:void(0)">主页</a></li>
+                    <li><a href="#logDiv">解决方案</a></li>
+                    <li><a href="#ssDiv">系统服务</a></li>
+                    <li data-toggle="#zhaopinDiv"><a href="#">加入我们</a></li>
+                    <li><a href="/#/contact">关于邻客</a></li>
+                    <li>
+                        <div class="navbar-signin">
+                            <img src="images/signin.png">
+                            <div><span>欢迎您！</span><br/>
+                            <a ng-hide="user" ng-click="sign('signin')">登录</a> &nbsp;&nbsp; 
+                            <a ng-hide="user" ng-click="sign('signup_simple')">注册</a> 
+                            <a ng-show="user" href="#/b/home">我的{{site.title}}</a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+                <form class="navbar-form navbar-right" role="search">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="输入关键字">
+                    </div>
+                    <input type="image" src="images/search.png">
+                </form>
+                <div id="zhaopinDiv"><img id="redTrian" src="images/redtriangle.png">
+                    <div>
+                        <ul><li><a href="/#/jobs"><span class="arrow-right"></span>安卓开发工程师</a></li>
+                            <li><a href="/#/jobs"><span class="arrow-right"></span>物联网架构设计师</a></li>
+                            <li><a href="/#/jobs"><span class="arrow-right"></span>Web开发工程师</a></li>
+                        </ul>
+                    </div>
+                    <div><span>招聘负责人</span>
+                        <span>Recruiting Director</span>
+                        <div>
+                            <img src="images/chenziwen.png">
+                            <div><span>陈子文</span>
+                                <a href="#">wenzi-chen@hnair.net</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!--/.container-fluid -->
+          </div>
 
 <div ui-view></div>
-<div id="footerDiv">
-	<div class="container">
-		<ul>
-			<li>
-				物流
-				<ul class="submenu">
-					<li><a href="#">登录</a></li>
-					<li><a href="#">注册</a></li>
-				</ul>
-			</li>
-			<li>
-				我有需求
-				<ul class="submenu">
-					<li><a href="#">询价与下单</a></li>
-					<li><a href="#">在途跟踪</a></li>
-					<li><a href="#">运费结算</a></li>
-				</ul>
-			</li>
-			<li>
-				关于我们
-				<ul class="submenu">
-					<li><a href="#">认识我们</a></li>
-					<li><a href="#">联系方式</a></li>
-				</ul>
-			</li>
-			<li>
-				登录
-				<ul class="submenu">
-					<li><a href="#">登录</a></li>
-					<li><a href="#">注册</a></li>
-				</ul>
-			</li>
-			<li>
-				<div style="float:left"><img src="images/app.png"> App下载</div>
-				<div style="float:left;margin-left:50px"><img src="images/weixin.png"> 微信公众号</div>
-				<img src="images/qrcode.png" style="clear:both;display:block;margin-top:50px">
-			</li>
-		</ul>
-		<footer>版权所有© 2014-2017 深圳市邻客网络技术有限公司 广ICP 备 081XXXXXX 号</footer>
-	</div>
-</div>
-<div id="toTop"><a id="toTopLink"><span class="icon-arrow-up glyphicon glyphicon-arrow-up"></span></a></div>
-<script type="text/javascript">
-$(document).ready(function() {
-	$("#navigator>li").hover(function() {
-		var selector = $(this).data("toggle");
-		selector && $(selector).slideDown();
-	},function() {
-		var selector = $(this).data("toggle");
-		selector && $(selector).hide();
-	});
 
-	$("#zhaopinDiv").mouseenter(function(){
-		!$(this).is(":visible") && $(this).show();
-	}).mouseleave(function() {
-		$(this).is(":visible") && $(this).slideUp();
-	});
 
-	jQuery(window).scroll(function () {
-		if (jQuery(this).scrollTop() >=200) {
-			jQuery("#toTop").fadeIn();
-		}else{
-			jQuery("#toTop").fadeOut();
-		}
-	});
-
-	jQuery("#toTop").click(function() {
-		jQuery("html, body").animate({ scrollTop: 0 }, "slow");
-		return false;
-	});
-});
-</script>
-
- 
+    <div id="footerDiv">
+        <div class="container">
+            <ul>
+                <li>
+                    物流
+                    <ul class="submenu">
+                        <li><a href="#">登录</a></li>
+                        <li><a href="#">注册</a></li>
+                    </ul>
+                </li>
+                <li>
+                    我有需求
+                    <ul class="submenu">
+                        <li><a href="#">询价与下单</a></li>
+                        <li><a href="#">在途跟踪</a></li>
+                        <li><a href="#">运费结算</a></li>
+                    </ul>
+                </li>
+                <li>
+                    关于我们
+                    <ul class="submenu">
+                        <li><a href="#">认识我们</a></li>
+                        <li><a href="#">联系方式</a></li>
+                    </ul>
+                </li>
+                <li>
+                    登录
+                    <ul class="submenu">
+                        <li><a href="#">登录</a></li>
+                        <li><a href="#">注册</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <div style="float:left"><img src="images/app.png"> App下载</div>
+                    <div style="float:left;margin-left:50px"><img src="images/weixin.png"> 微信公众号</div>
+                    <img src="images/qrcode.png" style="clear:both;display:block;margin-top:50px">
+                </li>
+            </ul>
+            <footer>版权所有© 2014-2017 深圳市邻客网络技术有限公司 广ICP 备 081XXXXXX 号</footer>
+        </div>
+    </div>
+      <div id="toTop"><a id="toTopLink"><span class="icon-arrow-up glyphicon glyphicon-arrow-up"></span></a></div>
+     <script src="js/homepage.js" type="text/javascript"></script>
+  </body>
+</html>

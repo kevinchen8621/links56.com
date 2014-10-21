@@ -1,19 +1,65 @@
-<div id="contact-middleDiv">
-	<div>
-		<img src="images/img-4-1.jpg">
-		<img src="images/img-4-2.jpg">
-		<img src="images/img-4-3.jpg">
-		<img src="images/img-4-4.jpg">
-	</div>
-	<div id="aboutUs">
-		<span>关于我们</span>{{site.aboutus}}
-	</div>
-	<div id="contactUs">
-		<span>联系我们</span>
-		{{site.address}} <br>
-		电话：{{site.tel}}<br>
-		传真：{{site.fax}} <br>
-		手机：{{site.mobile}}<br>
-		email：{{site.email}}
-	</div>
-</div>
+        <div id="contact-middleDiv">
+            <div><img src="images/img-4-1.jpg">
+            <img src="images/img-4-2.jpg">
+            <img src="images/img-4-3.jpg">
+            <img src="images/img-4-4.jpg">
+            </div>
+            <div id="aboutUs">
+                <span>关于我们</span>
+                <p>邻客物流有限公司作为海航集团下属产业，注册资本2亿元人民币。
+国家5A级物流企业，依托海航集团强有力的战略支持，坚持实体物流与虚拟物流联动的发展模式，旨在发展成为一家基于客户服务和体验的、依托互联网技术的新型物流公司。</p><p>
+我们以开放式的物流综合管理系统为平台，整合社会物流资源，为货主提供可靠、便捷、全面、成本可控的综合物流服务，成为满足客户需求的物流解决方案提供商，并最终发展成为连接厂商和终端客户的物流通道。</p>
+            </div>
+            <div id="contactUs">
+                <span>联系我们</span>
+                浦东新区浦东南路588号浦发大厦28楼 <br>
+                电话：021-6175-7088<br>
+                传真：021-6062-5251 <br>
+                手机：138-7630-7008<br>
+                email：wj2@hnair.com
+            </div>
+        </div>
+            <script type="text/javascript">
+         $(document).ready(function() {
+            $(window).scroll(function () {
+				if($(this).scrollTop() >0 )
+                        $("#navigator").css("opacity", 0);
+                    else
+                        $("#navigator").css("opacity", 1);
+			});
+             $("#navigator").hover(function() {
+                $(this).animate({
+                    opacity:1});
+            },function() {
+                if($(window).scrollTop()>0)
+                    $(this).animate({
+                        opacity:0});
+            });
+             
+            $("#navigator > div > ul:first-child > li").hover(function() {
+                var selector = $(this).data("toggle");
+                selector && $(selector).slideDown();
+            },function() {
+                var selector = $(this).data("toggle");
+                selector && $(selector).hide();
+            });
+            
+            $("#navigator .navbar-form>input").eq(0).click(function(e){
+                e.preventDefault();
+                var selector = $(this).prev();
+                if(selector.width()) {
+                    selector.animate({width: "0px"});
+                    $("#navigator .navbar-nav > li:last-child").show();
+                } else {
+                    $("#navigator .navbar-nav > li:last-child").hide();
+                    selector.animate({width: "270px"});
+                }
+            });
+            $("#zhaopinDiv").mouseenter(function(){
+                !$(this).is(":visible") && $(this).show();
+            }).mouseleave(function() {
+                $(this).is(":visible") && $(this).slideUp();
+            });
+            
+         });
+    </script>

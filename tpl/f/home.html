@@ -1,235 +1,119 @@
-<div id="background"><img src="images/bg1.jpg" class="stretch" alt="" /></div>
-<div class="container">
-	<div id="topRightDiv">
-		<div>
-			<span style="font-size:1.2em; font-family:Arial">输入订单号，查询详细数据...</span><br>
-			<div style="float:left; margin-right:1em; margin-top:10px; font-size:1.6em">上海</div>
-			<div style="margin-top:10px;font-size:1.6em">高速公路</div>
-			<div id="timeOfDay"></div>
-			<div id="clock"><div style="font-size:18px">120 m / h</div></div>
-		</div>
-	</div>
-</div>
-<div id="sectionDiv">
-	<div class="container">
-		<div class="subHeaderDiv">
-			<table>
-				<tr>
-					<td><img src="images/write.png"></td>
-					<td><span style="font-size:1.1em">询价与下单</span><br><span style="font-size:0.8em">在线询价、业务委托</span></td>
-				</tr>
-				<tr>
-					<td colspan="2">
-						<div class="btn-group btn-group-justified">
-							<div class="btn-group">
-								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">请您选择运输模式</button>
-								<ul class="dropdown-menu" role="menu">
-									<li><a href="#">陆运</a></li>
-									<li><a href="#">海运</a></li>
-									<li><a href="#">空运</a></li>
-									<li><a href="#">多式联运</a></li>
-								</ul>
-							</div>
-						</div>
-					</td>
-				</tr>
-			</table>
-		</div>
-		<div class="subHeaderDiv">
-			<table>
-				<tr><td><img src="images/track.png"></td><td><span style="font-size:1.1em">在途跟踪</span><br><span style="font-size:0.8em">在线查询、跟踪订单</span></td></tr>
-				<tr><td colspan="2"><div class="input-group input-group-justified"><input type="text" class="form-control" placeholder="请输入订单号"></div></tr>
-			</table>
-		</div>
-		<div class="subHeaderDiv">
-			<table>
-				<tr><td><img src="images/checkout.png"></td><td><span style="font-size:1.1em">运费结算</span><br><span style="font-size:0.8em">在线查询订单结算情况</span></td></tr>
-				<tr><td colspan="2"><div class="input-group input-group-justified"><input type="text" class="form-control" placeholder="请输入订单号"></div></td></tr>
-			</table>
-		</div>
-	</div>
-</div>
-<div id="shipmentDiv">
-	<div class="container">
-		<img src="images/truck.png" style="display:block; float:left; margin:10px 25px 0 5px">
-		<div><span style="font-size:1.8em">陆海空直达&多式联运</span><br><span>为您量身定制运输方式</span></div>
-		<div class="content">
-			<ul class="nav nav-pills nav-stacked">
-				<li><a data-toggle="#landShip"><div><b>陆运</b><span>运输网络覆盖全国</span></div></a></li>
-				<li><a data-toggle="#seaShip"><div><b>海运</b><span>承接海运国际运输代理业务</span></div></a></li>
-				<li><a data-toggle="#airShip"><div><b>空运</b><span>提供精准的空运服务</span></div></a></li>
-				<li><a data-toggle="#multiShip"><div><b>多式联运</b><span>提供海陆联运、海铁联运、海空联运等复合联运服务</span></div></a></li>
-			</ul>
-			<div id="imgDiv">
-				<div id ="landShip"><b>陆运</b><p>邻客公路运输网络覆盖国内上百座大中型城市，包含各种运输车型（厢式、平板、特种车辆等），为普通货物、冷冻品、危险品、精密仪等提供全方位地面运输服务。</p></div>
-				<div id ="seaShip"><b>海运</b><p>承接海运国际运输代理业务，为客户提供整柜、拼箱、大宗散杂货、进出口清关报关等国际海运及配套物流服务。</p></div>
-				<div id ="airShip"><b>空运</b><p>以上海、北京、广州、海口等城市为中心，辐射全国及部分国际线路，为客户提供精准的空运服务。</p></div>
-				<div id ="multiShip"><b>多式联运</b><p>根据货物特性及客户的多元化需求，通过组合多种不同运输方式，为客户提供海陆联运、海铁联运、海空联运等复合联运服务。</p></div>
-			</div>
-		</div>
-	</div>
-</div>
-<div id="logDiv">
-	<div class="container">
-		<div style="text-align:left">
-			<img src="images/box.png" style="display:block; float:left; margin-right:25px">
-			<div style="height:66px; line-height:66px"><span style="font-size:1.8em">物流解决方案</span></div>
-		</div>
-		<img src="images/logistic.png" style="margin-top:50px;">
-		<ul>
-			<li>产品物流<p>为生产制造型企业提供原材料及产成品配送、整车运输、零担运输、多式联运等多项“端到端”物流服务。 </p></li>
-			<li>项目物流<p>为各大装备制造企业提供工程建设项目的“交钥匙”物流解决方案，即为客户提供各型设备的远洋、内河、公路运输等物流整合服务。 </p></li>
-			<li>供应链物流<p>提供以物流服务为核心，为客户协调生产和进货计划、存货管理、及各销售渠道之间的协调协作。 </p></li>
-		</ul>
-	</div>
-</div>
-<div id="ssDiv">
-	<div class="container">
-		<img src="images/wheel.png" style="display:block; float:left; margin:10px 25px 0 5px">
-		<div><span style="font-size:1.8em;line-height:2em">系统服务</span><br><span style="font-size:.9em">提供全程“可视化”的物流服务</span></div>
-		<div id="ssLeftDiv">
-			<div></div><div></div><div></div>
-		</div>
-		<div class="flashDiv" id="flashDiv1">
-			<div></div>
-			<div>
-				<div>01 货主</div>
-				<ul><li>货主运输管理SAAS平台、货主运输管理APP</li></ul>
-				<p>运输过程可视化监控，实时了解运输途中的货物情况</p>
-			</div>
-		</div>
-		<div class="flashDiv" id="flashDiv2">
-			<div></div>
-			<div>
-				<div>02 承运商</div>
-				<ul><li>承运商运输管理SAAS平台</li></ul>
-				<p>管理车队，在线接货，为货主提供实时数据和业务监控</p>
-			</div>
-		</div>
-		<div class="flashDiv" id="flashDiv3">
-			<div></div>
-			<div>
-				<div>03 司机</div>
-				<ul><li>司机APP</li></ul>
-				<p>即时推送货源、在线接货，降低空载率，在线查看历史交易记录、付款记录</p>
-			</div>
-		</div>
-	</div>
-</div>
+      <div id="background">
+        <img src="images/bg1.jpg" class="stretch" alt="" />
+      </div>
+        <div class="container">
+          <div id="topRightDiv">
+              <div>
+                    <span style="font-size:1.2em; font-family:Arial">输入订单号，查询详细数据...</span><br>
+                    <div style="float:left; margin-right:1em; margin-top:10px; font-size:1.6em">上海</div><div style="margin-top:10px;font-size:1.6em">高速公路</div>
+                    <div id="timeOfDay"></div><div id="clock"><div style="font-size:18px">120 m / h</div></div>
+              </div>
+          </div>
+        </div>
+      
+        <div id="sectionDiv">
+             <div class="container">
+          <div class="subHeaderDiv">
+              <table><tr><td><img src="images/write.png"></td><td><span style="font-size:1.1em">询价与下单</span><br><span style="font-size:0.8em">在线询价、业务委托</span></td></tr><tr><td colspan="2"><!-- Single button -->
+                <div class="btn-group btn-group-justified">
+                  <div class="btn-group">
+                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    请您选择运输模式
+                  </button>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">陆运</a></li>
+                    <li><a href="#">海运</a></li>
+                    <li><a href="#">空运</a></li>
+                    <li><a href="#">多式联运</a></li>
+                  </ul>
+                    </div></div></td></tr></table>
+          </div>
+           <div class="subHeaderDiv">
+                  <table><tr><td><img src="images/track.png"></td><td><span style="font-size:1.1em">在途跟踪</span><br><span style="font-size:0.8em">在线查询、跟踪订单</span></td></tr><tr><td colspan="2">
+                      <div class="input-group input-group-justified">
+                          <input type="text" class="form-control" placeholder="请输入订单号">
+                      </div>
+                  </td></tr></table>
+      
+            </div>
+            <div class="subHeaderDiv">
+                  <table><tr><td><img src="images/checkout.png"></td><td><span style="font-size:1.1em">运费结算</span><br><span style="font-size:0.8em">在线查询订单结算情况</span></td></tr><tr><td colspan="2">
+                      <div class="input-group input-group-justified">
+                          <input type="text" class="form-control" placeholder="请输入订单号">
+                      </div>
+                  </td></tr></table>
+      
+            </div>
+      </div>
+    </div>
+         
+            <div id="shipmentDiv">
+                 <div class="container">
+                <img src="images/truck.png" style="display:block; float:left; margin:10px 25px 0 5px"><div><span style="font-size:1.8em">陆海空直达&多式联运</span><br><span>为您量身定制运输方式</span></div>
+                <div class="content"> 
+                    <ul class="nav nav-pills nav-stacked">
+                        <li><a data-toggle="#landShip"><div><b>陆运</b><span>运输网络覆盖全国</span></div></a></li>
+                          <li><a data-toggle="#seaShip"><div><b>海运</b><span>承接海运国际运输代理业务</span></div></a></li>
+                          <li><a data-toggle="#airShip"><div><b>空运</b><span>提供精准的空运服务</span></div></a></li>
+                            <li><a data-toggle="#multiShip"><div><b>多式联运</b><span>提供海陆联运、海铁联运、海空联运等复合联运服务</span></div></a></li>
+                    </ul>
+                    <div id="imgDiv">
+                        <div id ="landShip"><b>陆运</b><p>邻客公路运输网络覆盖国内上百座大中型城市，包含各种运输车型（厢式、平板、特种车辆等），为普通货物、冷冻品、危险品、精密仪等提供全方位地面运输服务。</p></div>
+                        <div id ="seaShip"><b>海运</b><p>承接海运国际运输代理业务，为客户提供整柜、拼箱、大宗散杂货、进出口清关报关等国际海运及配套物流服务。</p></div>
+                        <div id ="airShip"><b>空运</b><p>以上海、北京、广州、海口等城市为中心，辐射全国及部分国际线路，为客户提供精准的空运服务。</p></div>
+                        <div id ="multiShip"><b>多式联运</b><p>根据货物特性及客户的多元化需求，通过组合多种不同运输方式，为客户提供海陆联运、海铁联运、海空联运等复合联运服务。</p></div>
+                    </div>
+                </div>
+            </div>
+    </div>
     
-
-<script type="text/javascript">
-var sizeArray = [["151px","170px","105px"],["205px","204px","162px"]];
-var HomePage = {
+    <div id="logDiv">
+         <div class="container">
+             <div style="text-align:left">
+                <img src="images/box.png" style="display:block; float:left; margin-right:25px"><div style="height:66px; line-height:66px"><span style="font-size:1.8em">物流解决方案</span></div>
+              </div>
+             <img src="images/logistic.png" style="margin-top:50px;">
+             <ul>
+                 <li>产品物流<p>为生产制造型企业提供原材料及产成品配送、整车运输、零担运输、多式联运等多项“端到端”物流服务。 </p></li>
+                 <li>项目物流<p>为各大装备制造企业提供工程建设项目的“交钥匙”物流解决方案，即为客户提供各型设备的远洋、内河、公路运输等物流整合服务。 </p></li>
+                 <li>供应链物流<p>提供以物流服务为核心，为客户协调生产和进货计划、存货管理、及各销售渠道之间的协调协作。 </p></li>
+             </ul>
+        </div>
+    </div>
     
-    myTimer: function() {
-         currentIdx = currentIdx % 3;
-         var selector = $("#ssLeftDiv > div").get(currentIdx); 
-         var explainObj = $(".flashDiv").get(currentIdx);
-         if(selector) { 
-
-             var width = sizeArray[0][currentIdx];
-             var height = sizeArray[1][currentIdx];
-
-             var oldtop = $(selector).css("top");
-             $(selector).css("top", "+="+height).css({'height': '0px', 'width': '1px'}).show();
+    <div id="ssDiv">
+         <div class="container">
+                <img src="images/wheel.png" style="display:block; float:left; margin:10px 25px 0 5px"><div><span style="font-size:1.8em;line-height:2em">系统服务</span><br><span style="font-size:.9em">提供全程“可视化”的物流服务</span></div>
+             <div id="ssLeftDiv">
+                 <div></div><div></div><div></div>
+             </div>
              
-             $(selector).animate({
-                height: height,
-                top   : oldtop
-              }, 2000, function() {
-                      $(this).animate({
-                          width: width
-                      },1500, function() {
-                          $(explainObj).fadeIn("slow").delay(1000);
-                          $(explainObj).promise().done(function(){
-                                  $(selector).fadeOut(500);
-                                  $(explainObj).fadeOut(500);
-                          });
-                      });
-              });
-         }
-        currentIdx++;
-    },
+             <div class="flashDiv" id="flashDiv1">
+                <div></div>
+                 <div>
+                    <div>01 货主</div>
+                     <ul><li>货主运输管理SAAS平台、货主运输管理APP</li></ul>
+                     <p>运输过程可视化监控，实时了解运输途中的货物情况</p>
+                 </div>
+             </div>
+             
+              <div class="flashDiv" id="flashDiv2">
+                <div></div>
+                 <div>
+                    <div>02 承运商</div>
+                     <ul><li>承运商运输管理SAAS平台</li></ul>
+                     <p>管理车队，在线接货，为货主提供实时数据和业务监控</p>
+                 </div>
+             </div>
+             
+              <div class="flashDiv" id="flashDiv3">
+                <div></div>
+                 <div>
+                    <div>03 司机</div>
+                     <ul><li>司机APP</li></ul>
+                     <p>即时推送货源、在线接货，降低空载率，在线查看历史交易记录、付款记录</p>
+                 </div>
+             </div>
+        </div>
+    </div>
     
-    bindFlash: function() {
-        var myFlash;
-        function startFlashAnimation() {
-            HomePage.myTimer();
-            myFlash=setInterval(HomePage.myTimer, 5500);
-        }
-        startFlashAnimation();
-
-        $(".flashDiv").hover(function(e) {
-            e.preventDefault();
-            window.clearInterval(myFlash);
-            $(this).clearQueue().stop();
-            $("#ssLeftDiv > div:visible").clearQueue().stop();
-            $(this).fadeIn();
-            $("#ssLeftDiv > div:visible").fadeIn();
-        },function(e) {
-            $("#ssLeftDiv > div:visible").fadeOut(500);
-            $(this).fadeOut(500);
-            startFlashAnimation();
-        });
-    },
-    
-    updateClock: function() {
-            var currentTime = new Date ( );
-            var currentHours = currentTime.getHours ( );
-            var currentMinutes = currentTime.getMinutes ( );
-
-            // Choose either "AM" or "PM" as appropriate
-            var timeOfDay = ( currentHours < 12 ) ? "AM" : "PM";
-
-            // Convert the hours component to 12-hour format
-            currentHours = ( currentHours > 12 ) ? currentHours - 12 : currentHours;
-
-            // Convert an hours component of "0" to "12"
-            currentHours = ( currentHours == 0 ) ? 12 : currentHours;
-
-            // Compose the string for display
-            var currentTimeString = currentHours + ":" + ((currentMinutes < 10)?"0":"") + currentMinutes;
-
-            $("#timeOfDay").html(timeOfDay);
-            $("#clock").html(currentTimeString);
-    }
-};
-
-var currentIdx = 0;
-
-$(document).ready(function() {
-            HomePage.updateClock();
-            setInterval(HomePage.updateClock, 1000);
-            HomePage.bindFlash();
-            
-            $("#navigator > li > a").slice(1,3).click(function(){
-                $('html, body').animate({
-                    scrollTop: $( $.attr(this, 'href') ).offset().top
-                }, 'slow');
-                return false;
-            });
-            
-            $("#shipmentDiv a").hover(function(e) {
-                e.preventDefault();
-                var selector = $(this).data("toggle");
-                $(selector).show();
-            }, function(e) {
-                var selector = $(this).data("toggle");
-                $(selector).hide();
-            });
-            
-            $("#imgDiv>div").mouseenter(function() {
-                    var idx = $("#imgDiv>div").index(this);
-                    $("#shipmentDiv li").eq(idx).children("a").addClass("onfocus");
-                    $(this).show();
-              }).mouseleave(function() {
-                    var idx = $("#imgDiv>div").index(this);
-                    $("#shipmentDiv li").eq(idx).children("a").removeClass("onfocus");
-                    $(this).hide();
-              });
-            
-});
-
-</script>  
- 
