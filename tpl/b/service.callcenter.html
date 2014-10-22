@@ -6,36 +6,64 @@
 <div class="row">
 	<div class="col-xs-12">
 		<div class="row">
-			<div class="col-sm-6">
-				<div class="tabbable" data-bs-tab>
+			<div class="col-sm-7">
+				<div class="tabbable ng-tabs">
 					<ul class="nav nav-tabs">
-						<li class="active"><a href="#"><i class="green icon-home bigger-110"></i>委托定单</a></li>
-						<li><a href="#"><i class="icon-spinner icon-spin orange bigger-110"></i>准定单池 <span class="badge badge-danger">4</span></a></li>
-						<li><a href="#">运单查询</a></li>
+						<li ng-tab-head="active"><a ng-click="$event.preventDefault()"><i class="green icon-home bigger-110"></i>委托定单</a></li>
+						<li ng-tab-head><a ng-click="$event.preventDefault()"><i class="icon-spinner icon-spin orange bigger-110"></i>准定单池 <span class="badge badge-danger">4</span></a></li>
+						<li ng-tab-head><a ng-click="$event.preventDefault()">运单查询</a></li>
 					</ul>
 					<div class="tab-content">
-						<div class="tab-pane active">
+						<div ng-tab-body="animated fadeIn"  class="tab-pane">
 							<form class="form-horizontal" role="form">
-								<div class="form-group">
-									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 订单号 </label>
-									<div class="col-sm-3"><input readonly="true" type="text" id="form-field-1" placeholder="Username" class="col-xs-12 col-sm-12"></div>
-									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 客户 </label>
-									<div class="col-sm-5"><input readonly="true" type="text" id="form-field-1" placeholder="Username" class="col-xs-10 col-sm-10"></div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 订单简述 </label>
-									<div class="col-sm-10"><input type="text" id="form-field-1" placeholder="Username" class="col-xs-11 col-sm-11"></div>
-								</div>
-								<div class="space-4"></div>
-								<div class="form-group">
-									<label class="col-sm-2 control-label no-padding-right" for="form-field-2"> 订单说明 </label>
-									<div class="col-sm-9">
-										<textarea class="form-control" id="form-field-8" placeholder="Default Text"></textarea>
+								<fieldset>
+									<legend>订单信息</legend>
+									<!-- Radio input-->
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right" for="textinput-0">订单类型</label>
+										<div class="col-sm-10">
+											<div class="control-group">
+												<div class="radio col-xs-3 col-sm-3">
+													<label>
+														<input ng-model=" order.type" value="整车" type="radio" class="ace">
+														<span class="lbl"> 整车</span>
+													</label>
+												</div>
+												<div class="radio col-xs-3 col-sm-3">
+													<label>
+														<input ng-model=" order.type" value="其他" type="radio" class="ace">
+														<span class="lbl"> 其他</span>
+													</label>
+												</div>
+											</div>
+										</div>
 									</div>
-								</div>
+									<!-- Text input-->
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right" for="textinput-0">订单号</label>
+										<div class="col-sm-10">
+											<input id="textinput-0" readonly="true"  ng-model=" order._id" type="text" placeholder="订单号" class="col-xs-5 col-sm-5">
+										</div>
+									</div>
+									<!-- Text input-->
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right" for="textinput-0">订单简述</label>
+										<div class="col-sm-10">
+											<input id="textinput-0" ng-model=" order.title" type="text" placeholder="订单简述" class="col-xs-8 col-sm-8">
+										</div>
+									</div>
+									<!-- Text input-->
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right" for="textinput-0">订单说明</label>
+										<div class="col-sm-10">
+											<textarea class="form-control" ng-model="order.description" placeholder="订单说明"></textarea>
+										</div>
+									</div>
 								<hr>
-								<p class="alert alert-info">这里放发件方信息</p>
-								<p class="alert alert-success">这里放收件方信息</p>
+								<p ng-show="order.cust.title" class="alert alert-danger">客户信息：{{order.cust.title}}<br>{{order.cust.contact}} ({{order.cust.tel}})</p>
+								<p ng-show="order.infos.from.dist" class="alert alert-info">提货地址：{{order.infos.from.dist}}{{order.infos.from.address}}<br>{{order.infos.from.company}} —— {{order.infos.from.contact}}({{order.infos.from.tel}})</p>
+								<p ng-show="order.infos.to.dist" class="alert alert-success">送货地址：{{order.infos.to.dist}}{{order.infos.to.address}}<br>{{order.infos.to.company}} —— {{order.infos.to.contact}}({{order.infos.to.tel}})</p>
+								<p ng-repeat="item in order.infos.goods" class="alert alert-warning">{{item.title}}({{item.pkgmaterial}}{{item.pkgholder}}): {{item.piece}}件，{{item.weight | number:2}}吨，{{item.volume | number:2}}方，({{item.pkgl}} * {{item.pkgw}}*{{item.pkgh}} CM，{{item.pkgweight}}KG)</p>
 								<div class="clearfix form-actions">
 									<div class="col-md-offset-3 col-md-9">
 										<button class="btn btn-info" type="button"><i class="icon-ok bigger-110"></i>提交订单</button>
@@ -46,11 +74,11 @@
 							</form>						
 						</div>
 
-						<div class="tab-pane">
+						<div ng-tab-body="animated fadeIn" class="tab-pane">
 							<p>这里放队列.</p>
 						</div>
 
-						<div class="tab-pane">
+						<div ng-tab-body="animated fadeIn" class="tab-pane">
 							<p>这里放跟踪查询.</p>
 						</div>
 
@@ -60,16 +88,16 @@
 
 			<div class="vspace-xs-6"></div>
 
-			<div class="col-sm-6">
-				<div class="tabbable tabs-right" data-bs-tab>
+			<div class="col-sm-5">
+				<div class="tabbable tabs-right ng-tabs">
 					<ul class="nav nav-tabs" id="myTab3">
-						<li class="active"><a href="#"><i class="pink icon-dashboard bigger-110"></i>客户</a></li>
-						<li><a href="#"><i class="blue icon-user bigger-110"></i>地址</a></li>
-						<li><a href="#"><i class="green icon-rocket bigger-110"></i>服务</a></li>
-						<li><a href="#"><i class="icon-book bigger-110"></i>要求</a></li>
+						<li ng-tab-head="active"><a ng-click="$event.preventDefault()"><i class="pink icon-dashboard bigger-110"></i>客户</a></li>
+						<li ng-tab-head><a ng-click="$event.preventDefault()"><i class="blue icon-user bigger-110"></i>地址</a></li>
+						<li ng-tab-head><a ng-click="$event.preventDefault()"><i class="green icon-rocket bigger-110"></i>货物</a></li>
+						<li ng-tab-head><a ng-click="$event.preventDefault()"><i class="icon-book bigger-110"></i>要求</a></li>
 					</ul>
 					<div class="tab-content">
-						<div class="tab-pane active">
+						<div ng-tab-body="animated fadeIn" class="tab-pane">
 							<div class="widget-container-span ui-sortable">
 								<div class="widget-box transparent">
 									<div class="widget-header">
@@ -84,46 +112,224 @@
 									</div>
 									<div class="widget-body">
 										<div class="widget-main padding-6 no-padding-left no-padding-right">
-											<div class="row">
-												<div class="col-xs-6 col-md-3" ng-repeat="item in custs">
-													<div class="thumbnail alert alert-info">
-														<h5><i class="icon icon-user"></i>{{item.name}}</h5>
-														<h6 ng-show="custShowMode > 0">{{item.contact}} {{item.tel}}</h6>
-														<h6 ng-show="custShowMode > 1">{{item.area}}</h6>
-														<h6 ng-show="custShowMode > 2">{{item.addr}}</h6>
-													</div>
-												</div>
+											<div class="dd" id="nestable">
+												<ol class="dd-list">
+													<li class="dd-item" ng-repeat="item in custs" ng-click="sel_cust(item)">
+														<div class="dd-handle">{{item.title}}<span class="pull-right">{{item.contact}} ({{item.tel}})</span></div>
+													</li>
+												</ol>
 											</div>
 										</div>
 										<div class="space-24"></div>
-										<div class="accordion-style1 panel-group">
-											<div class="panel panel-default">
-												<div class="panel-heading">
-													<h4 class="panel-title">
-														<a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-															<i class="bigger-110 icon-angle-right" data-icon-hide="icon-angle-down" data-icon-show="icon-angle-right"></i>
-															&nbsp;新建 & 编辑客户信息
-														</a>
-													</h4>
+										<div class="widget-box" ng-class="{collapsed: !custCollapsed}">										
+											<div class="widget-header">
+												<h4 class="lighter">新建客户资料</h4>
+												<div class="widget-toolbar no-border">
+													<a ng-click="custCollapsed = !custCollapsed"><i class="icon-chevron-up"></i></a>
 												</div>
-
-												<div class="panel-collapse collapse" id="collapseOne" style="height: 0px;">
-													<div class="panel-body">
-														输入客户信息Form.
-													</div>
+											</div>
+											<div class="widget-body">
+												<div class="widget-main padding-6 no-padding-left no-padding-right">
+													<div>
+														<label for="form-field-8">客户简称</label>
+														<input id="form-field-8" ng-model=" cust.title" type="text" placeholder="客户简称" class="form-control">
+													</div><hr>
+													<div>
+														<label for="form-field-8">客户全称</label>
+														<input id="form-field-8" ng-model=" addr.name" type="text" placeholder="客户全称" class="form-control">
+													</div><hr>
+													<div>
+														<label for="selectbasic-0">所在区域</label>
+														<select ng-model="distObj.province" ng-change="set_distcode2(distObj2.province)" ng-options="d._id as d.name for d in distObj2.provinces" class="form-control">
+															<option value="">-- 省 --</option>
+														</select>
+														<select ng-model="distObj.city" ng-change="set_distcode2(distObj2.city)" ng-options="d._id as d.name for d in distObj2.citys" class="form-control">
+															<option value="">-- 市 --</option>
+														</select>
+														<select ng-model="distObj2.town" ng-change="set_distcode2(distObj2.town)" ng-options="d._id as d.name for d in distObj2.towns" class="form-control">
+															<option value="">-- 区 --</option>
+														</select>
+													</div><hr>
+													<div>
+														<label for="form-field-11">具体地址</label>
+														<input id="form-field-11" ng-model=" addr.address" type="text" placeholder="具体地址" class="form-control">
+													</div><hr>
+													<div>
+														<label for="form-field-12">联系人</label>
+														<input id="form-field-12" ng-model=" addr.contact" type="text" placeholder="具体地址" class="form-control">
+													</div><hr>
+													<div>
+														<label for="form-field-13">联系电话</label>
+														<input id="form-field-13" ng-model=" addr.tel" type="text" placeholder="具体地址" class="form-control">
+													</div><hr>
+													<div class="form-actions center">
+														<button ng-click="set_addr()" class="btn btn-sm btn-success">提交<i class="icon-arrow-right icon-on-right bigger-110"></i></button>
+													</div>										
 												</div>
-											</div>											
-										</div>	
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-						<div class="tab-pane">
-							<p>地址信息.</p>
+						<div ng-tab-body="animated fadeIn" class="tab-pane">
+							<div class="widget-container-span ui-sortable">
+								<div class="widget-box transparent">
+									<div class="widget-header">
+										<h4 class="lighter">选择收发货地址</h4>
+										<div class="widget-toolbar no-border">
+											<input type="text"  class="input-small" placeholder="搜索...">												
+										</div>	
+									</div>
+									<div class="widget-body">
+										<div class="widget-main padding-6 no-padding-left no-padding-right">
+											<div class="dd" id="nestable">
+												<ol class="dd-list">
+													<li class="dd-item" ng-repeat="item in addrs">
+														<div class="dd-handle">{{item.dist}}{{item.address}}
+														<div class="pull-right action-buttons">
+															<a class="blue" ng-click="sel_from(item)"><i class="icon-external-link bigger-130"></i></a>
+															<a class="red" ng-click="sel_to(item)"><i class="icon-download-alt bigger-130"></i></a>
+														</div>
+													</li>
+												</ol>
+											</div>
+										</div>
+										<div class="space-24"></div>
+										<div class="widget-box" ng-class="{collapsed: !custCollapsed}">										
+											<div class="widget-header">
+												<h4 class="lighter">新建客户资料</h4>
+												<div class="widget-toolbar no-border">
+													<a ng-click="custCollapsed = !custCollapsed"><i class="icon-chevron-up"></i></a>
+												</div>
+											</div>
+											<div class="widget-body">
+												<div class="widget-main padding-6 no-padding-left no-padding-right">
+													<div>
+														<label for="form-field-8">客户简称</label>
+														<input id="form-field-8" ng-model=" cust.title" type="text" placeholder="客户简称" class="form-control">
+													</div><hr>
+													<div>
+														<label for="form-field-8">客户全称</label>
+														<input id="form-field-8" ng-model=" addr.name" type="text" placeholder="客户全称" class="form-control">
+													</div><hr>
+													<div>
+														<label for="selectbasic-0">所在区域</label>
+														<select ng-model="distObj.province" ng-change="set_distcode2(distObj2.province)" ng-options="d._id as d.name for d in distObj2.provinces" class="form-control">
+															<option value="">-- 省 --</option>
+														</select>
+														<select ng-model="distObj.city" ng-change="set_distcode2(distObj2.city)" ng-options="d._id as d.name for d in distObj2.citys" class="form-control">
+															<option value="">-- 市 --</option>
+														</select>
+														<select ng-model="distObj2.town" ng-change="set_distcode2(distObj2.town)" ng-options="d._id as d.name for d in distObj2.towns" class="form-control">
+															<option value="">-- 区 --</option>
+														</select>
+													</div><hr>
+													<div>
+														<label for="form-field-11">具体地址</label>
+														<input id="form-field-11" ng-model=" addr.address" type="text" placeholder="具体地址" class="form-control">
+													</div><hr>
+													<div>
+														<label for="form-field-12">联系人</label>
+														<input id="form-field-12" ng-model=" addr.contact" type="text" placeholder="具体地址" class="form-control">
+													</div><hr>
+													<div>
+														<label for="form-field-13">联系电话</label>
+														<input id="form-field-13" ng-model=" addr.tel" type="text" placeholder="具体地址" class="form-control">
+													</div><hr>
+													<div class="form-actions center">
+														<button ng-click="set_addr()" class="btn btn-sm btn-success">提交<i class="icon-arrow-right icon-on-right bigger-110"></i></button>
+													</div>										
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 
-						<div class="tab-pane">
-							<p>服务内容.</p>
+						<div ng-tab-body="animated fadeIn" class="tab-pane">
+							<div class="widget-container-span ui-sortable">
+								<div class="widget-box transparent">
+									<div class="widget-header">
+										<h4 class="lighter">货物清单</h4>
+									</div>
+									<div class="widget-body">
+										<div class="widget-main padding-6 no-padding-left no-padding-right">
+											<div class="dd" id="nestable">
+												<ol class="dd-list">
+													<li class="dd-item" ng-repeat="item in order.infos.goods">
+														<div class="dd-handle">
+															{{item.title}}:{{item.piece}}件,{{item.weight | number:2}}KG,{{item.volume| number:2}}方
+															<div class="pull-right action-buttons">
+																<a class="red" ng-click="del_goods(item)"><i class="icon-remove bigger-130"></i></a>
+															</div>
+														</div>
+													</li>
+												</ol>
+											</div>
+										</div>
+										<div class="space-24"></div>
+										<div class="widget-box transparent">										
+											<div class="widget-header">
+												<h4 class="lighter">添加货物</h4>
+											</div>
+											<div class="widget-body">
+												<div class="widget-main padding-6 no-padding-left no-padding-right">
+													<div>
+														<label for="form-field-8">品名</label>
+														<input id="form-field-8" ng-model=" goods.title" type="text" placeholder="货物名称" class="form-control">
+													</div><hr>
+													<div>
+														<label for="selectbasic-0">货物属性</label>
+														<select ng-model="goods.pkgholder" class="form-control">
+															<option value="">-- 包装方式 --</option>
+															<option value="散杂货">散杂货</option>
+															<option value="集装箱">集装箱</option>
+															<option value="托盘">托盘</option>
+															<option value="箱">箱</option>
+															<option value="袋">袋</option>
+															<option value="包">包</option>
+															<option value="桶">桶</option>
+															<option value="捆">捆</option>
+														</select>
+														<select ng-model="goods.pkgmaterial" class="form-control">
+															<option value="">-- 包装材料 --</option>
+															<option value="纸制">纸制</option>
+															<option value="金属">金属</option>
+															<option value="木制">木制</option>
+															<option value="塑料">塑料</option>
+															<option value="麻制品">麻制品</option>
+															<option value="竹柳草制品">竹柳草制品</option>
+															<option value="玻璃制品">玻璃制品</option>
+															<option value="陶瓷">陶瓷</option>
+														</select>
+													</div><hr>
+													<div>
+														<label for="form-field-11">单件体积CM（长,宽,高）逗号分隔</label>
+														<input id="form-field-11" ng-model=" goods.pkgvolume" type="text" placeholder="长,宽,高 (逗号分隔)" class="form-control">
+													</div><hr>
+													<div>
+														<label for="form-field-12">单件重量KG</label>
+														<input id="form-field-12" ng-model=" goods.pkgweight" type="number" placeholder="单件重量KG" class="form-control">
+													</div><hr>
+													<div>
+														<label for="form-field-13">件数</label>
+														<input id="form-field-13" ng-model=" goods.piece" type="number" placeholder="件数" class="form-control">
+													</div><hr>
+													<div>
+														<label for="form-field-13">备注</label>
+														<input id="form-field-13" ng-model=" goods.rmk" type="text" placeholder="备注" class="form-control">
+													</div><hr>
+													<div class="form-actions center">
+														<button ng-click="set_goods()" class="btn btn-sm btn-success">提交<i class="icon-arrow-right icon-on-right bigger-110"></i></button>
+													</div>										
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 
 						<div class="tab-pane">

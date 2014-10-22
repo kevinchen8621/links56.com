@@ -11,7 +11,7 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 		.state("b", {abstract:true, url:'/b',  templateUrl: 'tpl/b/layout', controller:"BCtl"})
 		.state("b.home", {url:'/home',  templateUrl: 'tpl/b/home', controller:"BHomeCtl"})
 		.state("b.service", {abstract:true, url:'/service',  templateUrl: 'tpl/b/service', controller:"BServiceCtl"})
-		.state("b.service.callcenter", {url:'/callcenter',  templateUrl: 'tpl/b/service.callcenter', controller:"BServiceCtl"})
+		.state("b.service.callcenter", {url:'/callcenter',  templateUrl: 'tpl/b/service.callcenter', controller:"BServiceCallcenterCtl"})
 		.state("b.service.solution", {url:'/solution',  templateUrl: 'tpl/b/service.solution', controller:"BServiceCtl"})
 		.state("b.operate", {abstract:true, url:'/operate',  templateUrl: 'tpl/b/operate', controller:"BOperateCtl"})
 		.state("b.operate.home", {url:'/home',  templateUrl: 'tpl/b/operate.home', controller:"BOperateCtl"})
@@ -30,7 +30,8 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 		.state("b.analyse.cost", {url:'/cost',  templateUrl: 'tpl/b/analyse.cost', controller:"BAnalyseCtl"})
 		.state("b.dic", {abstract:true, url:'/dic',  templateUrl: 'tpl/b/dic', controller:"BDicCtl"})
 		.state("b.dic.cust", {url:'/cust',  templateUrl: 'tpl/b/dic.cust', controller:"BDicCustCtl"})
-		.state("b.dic.address", {url:'/address',  templateUrl: 'tpl/b/dic.address', controller:"BDicAddressCtl"})
+		.state("b.dic.custaddr", {url:'/custaddr',  templateUrl: 'tpl/b/dic.custaddr', controller:"BDicCustAddrCtl"})
+		.state("b.dic.custmem", {url:'/custmem',  templateUrl: 'tpl/b/dic.custmem', controller:"BDicCustMemCtl"})
 		.state("b.dic.service", {url:'/service',  templateUrl: 'tpl/b/dic.service', controller:"BDicCtl"})
 		.state("b.dic.request", {url:'/request',  templateUrl: 'tpl/b/dic.request', controller:"BDicCtl"})
 		.state("b.dic.partner", {url:'/partner',  templateUrl: 'tpl/b/dic.partner', controller:"BDicCtl"})
@@ -264,6 +265,87 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 	$scope.custShowMode = 0;
 	$scope.changeCustShow = function(){ $scope.custShowMode ++; if($scope.custShowMode > 3){ $scope.custShowMode = 0; } };
 }])
+.controller("BServiceCallcenterCtl",["$scope","$rootScope","$rest", "$dist", "$window", function($scope,$rootScope,$rest, $dist, $window){
+	$rest.get_custs(function(custs){
+		$scope.custs = custs;
+	});
+	$scope.sel_order = function(order){
+		order = order || {type:"整车", title: "",description: "", cust: {}, infos: { from: {}, to: {}, goods:[]}};
+		$scope.order = order;
+		$scope.filter_addrs(order.cust._id);
+	}
+	$scope.filter_addrs = function(cid){
+		if(cid){
+			$rest.get_addrs_by_owner(cid, function(addrs){
+				$scope.addrs = addrs;
+			});
+		}else{
+			$scope.addrs = [ ];
+		}
+		$scope.sel_addr();
+	};
+	$scope.sel_cust = function(cust){
+		console.log(cust);
+		$scope.order.cust = cust;
+		$scope.filter_addrs(cust._id);
+	};
+	$scope.sel_from = function(addr){
+		$scope.order.infos.from = addr;
+	};
+	$scope.sel_to = function(addr){
+		$scope.order.infos.to = addr;
+	}
+	$scope.sel_addr = function(addr){
+		addr = addr || {company: "",distcode: "310115", dist: "上海 上海市 浦东新区",address: "",tel: "",contact: ""};
+		$scope.addr = addr;
+		$scope.set_distcode2(addr.distcode);
+	};
+	$scope.new_goods = function(){
+		$scope.goods = {title: "", pkgholder:"", pkgmaterial: "",pkgvolume:"0,0,0",weight:0,piece:1,rmk:""}
+	}
+	$scope.set_goods = function(){
+		if(!$scope.goods.title){return;}
+		$scope.goods.piece = +$scope.goods.piece || 1;
+		$scope.goods.pkgweight = +$scope.goods.pkgweight || 0;
+		var sl = $scope.goods.pkgvolume.split(',');
+		if(sl.length == 3){
+			$scope.goods.pkgl = +sl[0] || 0;
+			$scope.goods.pkgw = +sl[1] || 0;
+			$scope.goods.pkgh = +sl[2] || 0;
+			$scope.goods.pkgv = $scope.goods.pkgl * $scope.goods.pkgw * $scope.goods.pkgh / 1000000;
+			$scope.goods.volume = $scope.goods.piece * $scope.goods.pkgv;
+		}else{
+			$scope.goods.pkgl =  0;
+			$scope.goods.pkgw =  0;
+			$scope.goods.pkgh =  0;
+			$scope.goods.pkgv = 0;
+			$scope.goods.volume = 0;
+		}
+		$scope.goods.weight = $scope.goods.piece * $scope.goods.pkgweight / 1000;
+		$scope.order.infos.goods.push(_.pick($scope.goods,"title","pkgholder","pkgmaterial","pkgl","pkgw","pkgh","pkgv","pkgweight","piece","volume","weight"));
+		console.log($scope.order.infos.goods);
+		$scope.new_goods();
+	}
+	$scope.del_goods = function(goods){
+		var idx = _.findIndex($scope.order.infos.goods, function(item){return item.title == goods.title;});
+		if(idx !== -1){$scope.order.infos.goods.splice(idx, 1);}
+	}
+	$scope.set_distcode2 = function(distcode){
+		_.extend($scope.distObj2, $dist.get_by_code(distcode));
+	};
+	$scope.set_addr = function(){
+		$scope.addr.distcode = $scope.distObj2.town || $scope.distObj2.city || $scope.distObj2.province || $scope.distObj2.country;
+		$scope.addr.dist = $dist.caption_by_code($scope.addr.distcode);
+		$scope.addr.owner_id = $scope.cust._id;
+		console.log()
+		$rest.set_addr($scope.addr, function(addr){
+			$scope.addr = addr;
+			utils.applyToSet($scope.addrs, addr);
+		});
+	}
+	$scope.sel_order();
+	$scope.new_goods();
+}])
 .controller("BOperateCtl",["$scope","$rootScope","$http","$window", function($scope,$rootScope,$http,$window){
 }])
 .controller("BFinanceCtl",["$scope","$rootScope","$http","$window", function($scope,$rootScope,$http,$window){
@@ -272,110 +354,92 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 }])
 .controller("BDicCtl",["$scope","$rootScope","$http","$window", function($scope,$rootScope,$http,$window){
 }])
-.controller("BDicCustCtl",["$scope","$rootScope","$rest","$dist", function($scope,$rootScope,$rest,$dist){
-	$scope.opt_cust_orgs = { data: 'cust_orgs',multiSelect: false, columnDefs: [
-		{field:'type', displayName:'客户类型'}, 
-		{field:'title', displayName:'客户简称'},
-		{field:'name', displayName:'客户全称'},
-		{field:'address', displayName:'具体地址'},
-		{field:'tel', displayName:'电话'},
-		{field:'website', displayName:'网址'},
-		{field:'business', displayName:'主营业务'},
-		{field:'turnover', displayName:'年营业额'},
-	]};
-	$rest.get_cust_orgs(function(orgs){
-		$scope.cust_orgs = orgs;
+.controller("BDicCustCtl",["$scope","$rootScope","$rest","$dist","utils", function($scope,$rootScope,$rest,$dist,utils){
+	$scope.distObj = {};
+	$scope.distObj2 = {};
+	$rest.get_custs(function(custs){
+		$scope.custs = custs;
 	}) ;
 	$scope.set_distcode = function(distcode){
-		distcode = distcode || 310115;
-
+		_.extend($scope.distObj, $dist.get_by_code(distcode));
 	};
-	$scope.new_custOrg = function(corg){
-		corg = corg || {};
-		$scope.custOrg = {
-			type: corg.type || "货主",
-			title: "",
-			name: "",
-			distcode: corg.distcode || "",
-			province: corg.province || "",
-			city: corg.city || "",
-			area: corg.area || "",
-			address: "",
-			tel: "",
-			website: "",
-			business : "",
-			turnover: "",
-		};
-		$scope.dists = $dist
+	$scope.sel_cust = function(cust){
+		cust = cust || {type:"货主",title: "",name: "",distcode: "310115", dist: "上海 上海市 浦东新区",address: "",tel: "",website: "",business : "",turnover: ""};
+		$scope.cust = cust;
+		$scope.set_distcode(cust.distcode);
+		$scope.filter_addrs(cust._id);
+	};
+	$scope.set_cust = function(){
+		$scope.cust.distcode = $scope.distObj.town || $scope.distObj.city || $scope.distObj.province || $scope.distObj.country;
+		console.log($scope.cust.distcode);
+		$scope.cust.dist = $dist.caption_by_code($scope.cust.distcode);
+		console.log($scope.cust.dist);
+		$rest.set_cust($scope.cust, function(cust){
+			$scope.cust = cust;
+			utils.applyToSet($scope.custs, cust);
+		});
 	}
-	$scope.new_custOrg();
-	$scope.set_custOrg = function(){
-
+	$scope.del_cust = function(cid){
+		$rest.del_cust(cid, function(){
+			utils.delFromSet($scope.custs, cid);
+		});
 	}
-
-
-	$scope.formFields.some(function (field, index) {
-		if (field.key === 'seeWhatYouType') {
-			seeWhatYouTypeIndex = index;
-			return true;
+	$scope.filter_addrs = function(cid){
+		if(cid){
+			$rest.get_addrs_by_owner(cid, function(addrs){
+				$scope.addrs = addrs;
+			});
+		}else{
+			$scope.addrs = [ ];
 		}
-	});	
-	$scope.data_cust_orgs = [
-		{name: "Moroni", age: 50},
-		{name: "Tiancum", age: 43},
-		{name: "Jacob", age: 27},
-		{name: "Nephi", age: 29},
-		{name: "Enos", age: 34}
-	];
-
-	$scope.custOrgForm = {
-		_id: {type: "hidden"},
-		type: {type: "text", label: "客户类型"},
-		title: {type: "text", label: "公司简称"},
-		name: {type: "text", label: "公司名称"},
-		address : { type: "text", label: "公司地址"},
-		tel : { type: "text", label: "电话"},
-		website : { type: "text", label: "网址"},
-		business : { type: "text", label: "主营业务"},
-		turnover : { type: "text", label: "年营业额"},
-		submit : { type: "submit"},
+		$scope.sel_addr();
 	};
-	$scope.custContactForm = {
-		_id: {type: "hidden"},
-		org_id: {type: "hidden"},
-		title: {type: "text", label: "真实姓名"},
-		username: {type: "text", label: "邻客账号"},
-		gender : { type: "text", label: "性别"},
-		department : { type: "text", label: "所属部门"},
-		position : { type: "text", label: "职位"},
-		mobile : { type: "text", label: "手机号码"},
-		submit : { type: "submit"},
+	$scope.set_distcode2 = function(distcode){
+		_.extend($scope.distObj2, $dist.get_by_code(distcode));
 	};
-	$scope.orderWaybillForm = {
-		_id: {type: "hidden"},
-		trand_id : { type: "text", label: "运单号"},
-		pickuptime: {type: "date", label: "要求提货时间"},
-		deliverytime: {type: "date", label: "要求到达时间"},
-		description:{type:"textarea", label: "内容描述"},
-		status:{type:"text", label:"运单状态"},
-		status_desc:{type:"text", label:"运单状态"},
-		concernted: {type:"checkbox", label:"是否已关注"},
+	$scope.sel_addr = function(addr){
+		addr = addr || {company: "",distcode: "310115", dist: "上海 上海市 浦东新区",address: "",tel: "",contact: ""};
+		$scope.addr = addr;
+		$scope.set_distcode2(addr.distcode);
+	};
+	$scope.set_addr = function(){
+		$scope.addr.distcode = $scope.distObj2.town || $scope.distObj2.city || $scope.distObj2.province || $scope.distObj2.country;
+		$scope.addr.dist = $dist.caption_by_code($scope.addr.distcode);
+		$scope.addr.owner_id = $scope.cust._id;
+		console.log()
+		$rest.set_addr($scope.addr, function(addr){
+			$scope.addr = addr;
+			utils.applyToSet($scope.addrs, addr);
+		});
 	}
-	$scope.orderSubwaybillForm = {
-		_id: {type: "hidden"},
-		trand_id : { type: "text", label: "运单号"},
-		pickuptime: {type: "date", label: "要求提货时间"},
-		deliverytime: {type: "date", label: "要求到达时间"},
-		description:{type:"textarea", label: "内容描述"},
+	$scope.del_addr = function(aid){
+		$rest.del_addr(aid, function(){
+			utils.delFromSet($scope.addrs, aid);
+		});
 	}
-
+	$scope.sel_cust();
 }])
-.controller("BDicAddressCtl",["$scope","$rootScope","$http","$window", function($scope,$rootScope,$http,$window){
-	$scope.formTemplate = {
-		first: {type: "text", label: "First Name"},
-		"last": { type: "text", label: "Last Name"},
-		"submit": { type: "submit"},
+.controller("BDicCustAddrCtl",["$scope","$rootScope","$http","$window", function($scope,$rootScope,$http,$window){
+	$scope.distObj = {};
+	$rest.get_custs(function(custs){
+		$scope.custs = custs;
+	}) ;
+	$scope.set_distcode = function(distcode){
+		_.extend($scope.distObj, $dist.get_by_code(distcode));
 	};
+	$scope.sel_addr = function(addr){
+		addr = addr || {type:"货主",title: "",name: "",distcode: "310115", dist: "上海 上海市 浦东新区",address: "",tel: "",website: "",business : "",turnover: ""};
+		$scope.cust_addr = addr;
+		$scope.set_distcode(cust.distcode);
+	};
+	$scope.sel_cust();
+	$scope.set_cust = function(){
+		$rest.set_cust_org($scope.cust_org, function(org){
+			console.log(org);
+			$scope.cust_org = org;
+			utils.applyToSet($scope.cust_orgs, org);
+		});
+	}
 }])
 .controller("BSiteCtl",["$scope","$rootScope","$http","$window", function($scope,$rootScope,$http,$window){
 }])
