@@ -137,7 +137,7 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 	}
 }])
 .controller("BCtl",["$scope", "$rootScope","$state", function($scope,$rootScope,$state){
-	if(!$rootScope.user){$state.go("f.sign");}
+	if(!$rootScope.user){$state.go("f.home");}
 	$scope.summary = {
 		orders_count_latest: 0,
 		orders_money_latest: 0,
