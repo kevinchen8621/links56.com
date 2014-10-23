@@ -1,3 +1,107 @@
 <div class="page-header">
 	<h1>售前阶段<small><i class="icon-double-angle-right"></i> 解决方案 &amp;业务专家支持 </small></h1>
 </div>
+<div class="row">
+	<div class="col-xs-12">
+		<div class="tabbable ng-tabs">
+			<ul class="nav nav-tabs">
+				<li ng-tab-head="active"><a ng-click="$event.preventDefault()"><i class="icon-spinner icon-spin orange bigger-110"></i>待处理订单池 <span class="badge badge-danger">4</span></a></li>
+				<li ng-tab-head ng-show="order._id"><a ng-click="$event.preventDefault()"><i class="green icon-cog bigger-110"></i>订单处理</a></li>
+				<li ng-tab-head><a ng-click="$event.preventDefault()">典型方案参考</a></li>
+			</ul>
+			<div class="tab-content">
+				<div ng-tab-body="animated fadeIn"  class="tab-pane">
+							<div class="row">
+								<div class="col-xs-4 col-sm-3 pricing-box" ng-repeat="item in orders">
+									<div class="widget-box">
+										<div class="widget-header header-color-dark"><h5 class="bigger lighter">{{item.cust.title}}</h5></div>
+										<div class="widget-body">
+											<div class="widget-main">
+												<ul class="list-unstyled spaced2">
+													<li><i class="icon-pencil green"></i>始:{{item.infos.from.dist}}</li>
+													<li><i class="icon-pencil green"></i>终:{{item.infos.to.dist}}</li>
+													<li><i class="icon-pencil green"></i>{{item.infos.piece}}件|{{item.infos.weight| number:1}}吨|{{item.infos.volume| number:0}}方</li>
+													<li><i class="icon-ok green"></i>{{item.info.solution || "物流方案待定"}}</li>
+												</ul>
+											</div>
+											<div>
+												<a ng-click="sel_order(item);tabs.index = 2;" class="btn btn-block btn-inverse"><i class="icon-calendar bigger-110"></i><span>报价</span></a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+				</div>
+				<div ng-tab-body="animated fadeIn"  ng-show="order._id" class="tab-pane">
+					<div class="row">
+						<div class="col-sm-6">
+							<h4>{{order.cust.title}}</h4>
+							<hr>
+							<h4>总计：{{order.infos.piece}}件，{{order.infos.weight| number:1}}吨，{{order.infos.volume| number:0}}方</h4>
+							<h5>客户信息：{{order.cust.name}}<br>{{order.cust.contact}} ({{order.cust.tel}})</h5>
+							<h5>提货地址：{{order.infos.from.dist}}{{order.infos.from.address}}<br>{{order.infos.from.company}} —— {{order.infos.from.contact}}({{order.infos.from.tel}})</h5>
+							<h5>送货地址：{{order.infos.to.dist}}{{order.infos.to.address}}<br>{{order.infos.to.company}} —— {{order.infos.to.contact}}({{order.infos.to.tel}})</h5>
+							<h6 ng-repeat="item in order.infos.goods">{{item.title}}({{item.pkgmaterial}}{{item.pkgholder}}): {{item.piece}}件，{{item.weight | number:2}}吨，{{item.volume | number:2}}方<br>单品 {{item.pkgl}} * {{item.pkgw}} * {{item.pkgh}} CM，{{item.pkgweight}}KG</h6>
+							<hr>
+						</div>
+						<div class="col-sm-6">
+							<h4>物流方案<button class="btn btn-success btn-sm pull-right">提交</button></h4>
+							<hr>
+							<ul class="media-list">
+								<li class="media" ng-repeat="item in order.infos.solutions">
+								<a class="pull-left" href="#"><img class="media-object" src="{{item.car.img}}" style="width: 80px;"></a>
+								<div class="media-body">
+								<h4 class="media-heading">车辆 {{item.car.name}}，费用 ￥{{item.fee}}元 <a ng-click="del_solution($index)" class="btn btn-minier btn-info"><i class="icon-only icon-trash"></i></a></h4>
+								<p ng-repeat="g in item.goods">{{g.title}}({{g.pkgmaterial}}{{g.pkgholder}}): {{g.piece}}件，{{g.weight | number:2}}吨，{{g.volume | number:2}}方</p>
+								<p>{{item.rmk}} </p>
+								</li>
+							</ul>
+							<div class="widget-box">
+								<div class="widget-header"><h4>指派车辆</h4></div>
+								<div class="widget-body">
+									<div class="widget-main no-padding">
+										<form class="form-horizontal" role="form">
+										<fieldset>
+											<div class="form-group">
+												<label class="col-sm-3 control-label no-padding-right" for="textinput-0">车型</label>
+												<div class="col-sm-9">
+													<select ng-model="solution.car" ng-options="c as c.name for c in cars" class="col-xs-5 col-sm-5"></select>
+												</div>
+											</div>
+											<div class="form-group" ng-repeat="item in order.infos.goods">
+												<label class="col-sm-3 control-label no-padding-right" for="textinput-0">{{item.title}}件数</label>
+												<div class="col-sm-9">
+													<input type="number" ng-model="solution.goods[$index].piece" placeholder="件数…" class="col-xs-5 col-sm-5">
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label no-padding-right" for="textinput-0">费用</label>
+												<div class="col-sm-9">
+													<input type="number" ng-model="solution.fee" placeholder="费用…">
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label no-padding-right" for="textinput-0">费用说明</label>
+												<div class="col-sm-9">
+													<input type="text" ng-model="solution.rmk" placeholder="费用说明…">
+												</div>
+											</div>
+										</fieldset>
+										<div class="form-actions center">
+											<button ng-click="add_solution()" class="btn btn-sm btn-success">添加<i class="icon-arrow-right icon-on-right bigger-110"></i></button>
+										</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div ng-tab-body="animated fadeIn"  class="tab-pane">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+

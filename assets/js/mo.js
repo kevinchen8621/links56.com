@@ -48119,11 +48119,18 @@ mo.constant('constants', {
 		set_member:function(obj, cb){post("/api/member", obj, cb);},
 
 		get_videos_by_catid:function(catid, cb){get("/api/videos/catid/"+catid, cb);},
+
 		get_taobao_dists: function(cb){ get("/api/taobao/dists", cb);},
+		get_logistics_cars: function(cb){ get("/api/logistics/cars", cb);},
 
 		del_addr: function(aid, cb){ get("/api/addr/" + aid + "/del", cb);},
 		set_addr: function(addr, cb){ post("/api/addr", addr, cb);},
 		get_addrs_by_owner: function(oid, cb){ get("/api/addrs/owner/"+oid, cb);},
+
+		del_order: function(oid, cb){ get("/api/order/" + oid + "/del", cb);},
+		set_order: function(order, cb){ post("/api/order", order, cb);},
+		get_orders_by_cust: function(cid, cb){ get("/api/orders/cust/"+cid, cb);},
+		get_orders: function(cb){ get("/api/orders", cb);},
 
 		del_cust: function(cid, cb){ get("/api/cust/"+ cid +"/del", cb);},
 		set_cust: function(cust, cb){ post("/api/cust", cust, cb);},
@@ -48131,9 +48138,6 @@ mo.constant('constants', {
 		del_cust_mem: function(mid, cb){ get("/api/cust/mem/" + mid + "/del", cb);},
 		set_cust_mem: function(mem, cb){ post("/api/cust/mem", mem, cb);},
 		get_cust_mems: function(cid, cb){ get("/api/cust/"+cid+"/mems", cb);},
-		del_cust_order: function(oid, cb){ get("/api/cust/order/" + oid + "/del", cb);},
-		set_cust_order: function(order, cb){ post("/api/cust/order", order, cb);},
-		get_cust_orders: function(cid, cb){ get("/api/cust/"+cid+"/orders", cb);},
 		del_cust_waybill: function(wid, cb){ get("/api/cust/waybill/" + wid + "/del", cb);},
 		set_cust_waybill: function(waybill, cb){ post("/api/cust/waybill", waybill, cb);},
 		get_cust_waybills: function(cid, cb){ get("/api/cust/"+cid+"/waybills", cb);},

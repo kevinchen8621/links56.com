@@ -12,7 +12,7 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 		.state("b.home", {url:'/home',  templateUrl: 'tpl/b/home', controller:"BHomeCtl"})
 		.state("b.service", {abstract:true, url:'/service',  templateUrl: 'tpl/b/service', controller:"BServiceCtl"})
 		.state("b.service.callcenter", {url:'/callcenter',  templateUrl: 'tpl/b/service.callcenter', controller:"BServiceCallcenterCtl"})
-		.state("b.service.solution", {url:'/solution',  templateUrl: 'tpl/b/service.solution', controller:"BServiceCtl"})
+		.state("b.service.solution", {url:'/solution',  templateUrl: 'tpl/b/service.solution', controller:"BServiceSolutionCtl"})
 		.state("b.operate", {abstract:true, url:'/operate',  templateUrl: 'tpl/b/operate', controller:"BOperateCtl"})
 		.state("b.operate.home", {url:'/home',  templateUrl: 'tpl/b/operate.home', controller:"BOperateCtl"})
 		.state("b.operate.dispatch", {url:'/dispatch',  templateUrl: 'tpl/b/operate.dispatch', controller:"BOperateCtl"})
@@ -265,12 +265,17 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 	$scope.custShowMode = 0;
 	$scope.changeCustShow = function(){ $scope.custShowMode ++; if($scope.custShowMode > 3){ $scope.custShowMode = 0; } };
 }])
-.controller("BServiceCallcenterCtl",["$scope","$rootScope","$rest", "$dist", "$window", function($scope,$rootScope,$rest, $dist, $window){
-	$rest.get_custs(function(custs){
-		$scope.custs = custs;
-	});
+.controller("BServiceCallcenterCtl",["$scope","$rootScope","$rest", "$dist", "utils", function($scope,$rootScope,$rest, $dist, utils){
+	$scope.distObj = {};
+	$scope.cust = {title: "", contact: "", tel: ""};
+	$scope.addr = {company: "",distcode: 310115, dist: "上海 上海市 浦东新区",address: "",tel: "",contact: ""};
+	$scope.set_distcode = function(distcode){_.extend($scope.distObj, $dist.get_by_code(distcode)); console.log($scope.distObj);};
+	$scope.set_distcode($scope.addr.distcode);
+	$rest.get_custs(function(custs){$scope.custs = custs;});
+	$rest.get_orders(function(orders){$scope.orders = orders;});
+
 	$scope.sel_order = function(order){
-		order = order || {type:"整车", title: "",description: "", cust: {}, infos: { from: {}, to: {}, goods:[]}};
+		order = order || {type:"整车", title: "",description: "", cust: {}, infos: { from: {}, to: {}, goods:[]}, status:"询价"};
 		$scope.order = order;
 		$scope.filter_addrs(order.cust._id);
 	}
@@ -282,24 +287,36 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 		}else{
 			$scope.addrs = [ ];
 		}
-		$scope.sel_addr();
 	};
 	$scope.sel_cust = function(cust){
 		console.log(cust);
 		$scope.order.cust = cust;
 		$scope.filter_addrs(cust._id);
 	};
-	$scope.sel_from = function(addr){
-		$scope.order.infos.from = addr;
+	$scope.set_cust = function(){
+		var cust = {
+			type:"货主",
+			title: $scope.cust.title || "",
+			name: $scope.cust.title || "",
+			distcode: "1", 
+			dist: "中国",
+			address: "",
+			contact: $scope.cust.contact || "",
+			tel: $scope.cust.tel || "",
+			website: "",
+			business : "",
+			turnover: ""
+		};
+		$rest.set_cust(cust, function(item){
+			$scope.cust = {title: "", contact: "", tel: ""};
+			utils.applyToSet($scope.custs, item);
+			$scope.order.cust = item;
+		});
 	};
-	$scope.sel_to = function(addr){
-		$scope.order.infos.to = addr;
-	}
-	$scope.sel_addr = function(addr){
-		addr = addr || {company: "",distcode: "310115", dist: "上海 上海市 浦东新区",address: "",tel: "",contact: ""};
-		$scope.addr = addr;
-		$scope.set_distcode2(addr.distcode);
-	};
+	$scope.sel_from = function(addr){$scope.order.infos.from = addr;};
+	$scope.sel_to = function(addr){$scope.order.infos.to = addr;};
+	$scope.del_order_from = function(){$scope.order.infos.from = {};};
+	$scope.del_order_to = function(){$scope.order.infos.to = {};};
 	$scope.new_goods = function(){
 		$scope.goods = {title: "", pkgholder:"", pkgmaterial: "",pkgvolume:"0,0,0",weight:0,piece:1,rmk:""}
 	}
@@ -330,21 +347,53 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 		var idx = _.findIndex($scope.order.infos.goods, function(item){return item.title == goods.title;});
 		if(idx !== -1){$scope.order.infos.goods.splice(idx, 1);}
 	}
-	$scope.set_distcode2 = function(distcode){
-		_.extend($scope.distObj2, $dist.get_by_code(distcode));
-	};
 	$scope.set_addr = function(){
-		$scope.addr.distcode = $scope.distObj2.town || $scope.distObj2.city || $scope.distObj2.province || $scope.distObj2.country;
+		$scope.addr.distcode = $scope.distObj.town || $scope.distObj.city || $scope.distObj.province || $scope.distObj.country;
 		$scope.addr.dist = $dist.caption_by_code($scope.addr.distcode);
-		$scope.addr.owner_id = $scope.cust._id;
-		console.log()
+		$scope.addr.owner_id = $scope.order.cust._id;
 		$rest.set_addr($scope.addr, function(addr){
-			$scope.addr = addr;
 			utils.applyToSet($scope.addrs, addr);
+			if(!$scope.order.infos.from._id){ $scope.order.infos.from = addr; }
+			if(!$scope.order.infos.to._id){ $scope.order.infos.to = addr; }
+		});
+		$scope.addr = {company: "",distcode: "310115", dist: "上海 上海市 浦东新区",address: "",tel: "",contact: ""};
+	}
+	$scope.set_order = function(){
+		$scope.order.infos.piece = 0; $scope.order.infos.goods.forEach(function(item){$scope.order.infos.piece += item.piece;});
+		$scope.order.infos.weight = 0; $scope.order.infos.goods.forEach(function(item){$scope.order.infos.weight += item.weight;});
+		$scope.order.infos.volume = 0; $scope.order.infos.goods.forEach(function(item){$scope.order.infos.volume += item.volume;});
+		$rest.set_order($scope.order, function(){
+			$scope.order = {type:"整车", title: "",description: "", cust: {}, infos: { from: {}, to: {}, goods:[]}, status:"询价"};
+		});
+	}
+	$scope.cancel_order = function(){
+		$scope.order.status = "撤销";
+		$rest.set_order($scope.order, function(){
+			$scope.order = {type:"整车", title: "",description: "", cust: {}, infos: { from: {}, to: {}, goods:[]}, status:"询价"};
 		});
 	}
 	$scope.sel_order();
 	$scope.new_goods();
+}])
+.controller("BServiceSolutionCtl",["$scope","$rootScope","$rest", "$dist", "utils", function($scope,$rootScope,$rest, $dist, utils){
+	$rest.get_orders(function(orders){$scope.orders = orders;});
+	$rest.get_logistics_cars(function(cars){$scope.cars = cars;});
+	$scope.sel_order = function(item){
+		$scope.order = item;
+		$scope.solution = {
+			car: {},
+			goods: item.infos.goods,
+		};
+	};
+	$scope.add_solution = function(){
+		$scope.order.infos.solutions = $scope.order.infos.solutions || [];
+		$scope.order.infos.solutions.push($scope.solution);
+		$scope.solution = {
+			car: {},
+			goods: $scope.order.infos.goods,
+		};
+	};
+
 }])
 .controller("BOperateCtl",["$scope","$rootScope","$http","$window", function($scope,$rootScope,$http,$window){
 }])
