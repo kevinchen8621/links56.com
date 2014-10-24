@@ -265,7 +265,7 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 	$scope.custShowMode = 0;
 	$scope.changeCustShow = function(){ $scope.custShowMode ++; if($scope.custShowMode > 3){ $scope.custShowMode = 0; } };
 }])
-.controller("BServiceCallcenterCtl",["$scope","$rootScope","$rest", "$dist", "utils", function($scope,$rootScope,$rest, $dist, utils){
+.controller("BServiceCallcenterCtl",["$scope","$rootScope","$rest", "$dist", "utils","$window", function($scope,$rootScope,$rest, $dist, utils, $window){
 	$scope.distObj = {};
 	$scope.cust = {title: "", contact: "", tel: ""};
 	$scope.addr = {company: "",distcode: 310115, dist: "上海 上海市 浦东新区",address: "",tel: "",contact: ""};
@@ -273,6 +273,17 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 	$scope.set_distcode($scope.addr.distcode);
 	$rest.get_custs(function(custs){$scope.custs = custs;});
 	$rest.get_orders(function(orders){$scope.orders = orders;});
+
+	$scope.do_print = function(){
+		console.log("print");
+		var bdhtml= $window.document.body.innerHTML; 
+		var sprnstr="<!--startprint-->"; 
+		var eprnstr="<!--endprint-->"; 
+		var prnhtml=bdhtml.substr(bdhtml.indexOf(sprnstr)+17); 
+		prnhtml=prnhtml.substring(0,prnhtml.indexOf(eprnstr)); 
+		$window.document.body.innerHTML=prnhtml; 
+		$window.print(); 
+	};
 
 	$scope.sel_order = function(order){
 		order = order || {type:"整车", title: "",description: "", cust: {}, infos: { from: {}, to: {}, goods:[]}, status:"询价"};
@@ -455,10 +466,10 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 		$scope.addr.distcode = $scope.distObj2.town || $scope.distObj2.city || $scope.distObj2.province || $scope.distObj2.country;
 		$scope.addr.dist = $dist.caption_by_code($scope.addr.distcode);
 		$scope.addr.owner_id = $scope.cust._id;
-		console.log()
 		$rest.set_addr($scope.addr, function(addr){
 			$scope.addr = addr;
 			utils.applyToSet($scope.addrs, addr);
+			$scope.sel_addr();
 		});
 	}
 	$scope.del_addr = function(aid){
